@@ -1,4 +1,4 @@
-# @myapp/api-core
+# @gcapnias/api-core
 
 Core API functionality with SQLite database integration for the MCP server monorepo.
 
@@ -9,7 +9,7 @@ This package provides a database abstraction layer using SQLite via `better-sqli
 ## Features
 
 - 🗃️ **SQLite Integration** - High-performance SQLite database with WAL mode enabled
-- 🔄 **Type-Safe API** - Fully typed responses using shared types from `@myapp/shared-types`
+- 🔄 **Type-Safe API** - Fully typed responses using shared types from `@gcapnias/shared-types`
 - ✅ **Consistent Error Handling** - All methods return `ApiResponse<T>` with success/error states
 - 🚀 **Optimized Performance** - WAL (Write-Ahead Logging) mode for better concurrency
 - 📦 **Schema Management** - Built-in schema initialization
@@ -28,8 +28,8 @@ pnpm install
 ### Import
 
 ```typescript
-import { DatabaseService } from '@myapp/api-core';
-import type { DatabaseConfig } from '@myapp/shared-types';
+import { DatabaseService } from '@gcapnias/api-core';
+import type { DatabaseConfig } from '@gcapnias/shared-types';
 ```
 
 ### Basic Example
@@ -226,7 +226,7 @@ The `DatabaseService` automatically configures:
   - Must match Node.js version
   - See [better-sqlite3 docs](https://github.com/WiseLibs/better-sqlite3) for details
 
-- **`@myapp/shared-types`** (workspace) - Shared TypeScript type definitions
+- **`@gcapnias/shared-types`** (workspace) - Shared TypeScript type definitions
 
 ### Development Dependencies
 
@@ -255,14 +255,14 @@ pnpm test
 
 ## Type Exports
 
-This package re-exports types from `@myapp/shared-types`:
+This package re-exports types from `@gcapnias/shared-types`:
 
 ```typescript
 import type { 
   DatabaseConfig, 
   ApiResponse,
   ServerConfig 
-} from '@myapp/api-core';
+} from '@gcapnias/api-core';
 ```
 
 ## Performance Considerations
@@ -316,7 +316,7 @@ To add new tables or modify the schema:
 
 1. Update the `initialize()` method in `src/index.ts`
 2. Add corresponding methods for CRUD operations
-3. Define return types in `@myapp/shared-types`
+3. Define return types in `@gcapnias/shared-types`
 4. Update this README with new API documentation
 
 **Example:**
@@ -361,8 +361,8 @@ If using the database from multiple processes, ensure proper connection manageme
 
 ## Related Packages
 
-- [`@myapp/shared-types`](../shared-types) - Shared TypeScript type definitions
-- [`@myapp/mcp-server`](../../apps/mcp-server) - MCP server application using this API
+- [`@gcapnias/shared-types`](../shared-types) - Shared TypeScript type definitions
+- [`@gcapnias/mcp-server`](../../apps/mcp-server) - MCP server application using this API
 
 ## License
 

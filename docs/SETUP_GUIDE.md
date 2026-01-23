@@ -325,7 +325,7 @@ Create `packages/shared-types/package.json`:
 
 ```json
 {
-  "name": "@myapp/shared-types",
+  "name": "@gcapnias/shared-types",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -418,7 +418,7 @@ Create `packages/api-core/package.json`:
 
 ```json
 {
-  "name": "@myapp/api-core",
+  "name": "@gcapnias/api-core",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -435,7 +435,7 @@ Create `packages/api-core/package.json`:
     "test": "vitest"
   },
   "dependencies": {
-    "@myapp/shared-types": "workspace:*",
+    "@gcapnias/shared-types": "workspace:*",
     "better-sqlite3": "^11.0.0"
   },
   "devDependencies": {
@@ -446,7 +446,7 @@ Create `packages/api-core/package.json`:
 
 **Important:**
 
-- `"@myapp/shared-types": "workspace:*"` - Links to workspace package
+- `"@gcapnias/shared-types": "workspace:*"` - Links to workspace package
 - `"better-sqlite3": "^11.0.0"` - Native module dependency
 
 #### tsconfig.json
@@ -486,7 +486,7 @@ Create `packages/api-core/src/index.ts`:
 
 ```typescript
 import Database from 'better-sqlite3';
-import type { DatabaseConfig, ApiResponse } from '@myapp/shared-types';
+import type { DatabaseConfig, ApiResponse } from '@gcapnias/shared-types';
 
 /**
  * Core API functionality with SQLite database integration
@@ -579,7 +579,7 @@ Create `apps/mcp-server/package.json`:
 
 ```json
 {
-  "name": "@myapp/mcp-server",
+  "name": "@gcapnias/mcp-server",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -593,8 +593,8 @@ Create `apps/mcp-server/package.json`:
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@myapp/api-core": "workspace:*",
-    "@myapp/shared-types": "workspace:*"
+    "@gcapnias/api-core": "workspace:*",
+    "@gcapnias/shared-types": "workspace:*"
   },
   "peerDependencies": {
     "better-sqlite3": "^11.0.0"
@@ -656,8 +656,8 @@ Create `apps/mcp-server/tsconfig.json`:
 Create `apps/mcp-server/src/index.ts` (NO shebang - esbuild adds it):
 
 ```typescript
-import { DatabaseService } from '@myapp/api-core';
-import type { ServerConfig } from '@myapp/shared-types';
+import { DatabaseService } from '@gcapnias/api-core';
+import type { ServerConfig } from '@gcapnias/shared-types';
 
 const config: ServerConfig = {
   name: 'MCP Server',
@@ -764,11 +764,11 @@ pnpm build
 **Expected output:**
 
 ```text
-• Packages in scope: @myapp/api-core, @myapp/mcp-server, @myapp/shared-types
+• Packages in scope: @gcapnias/api-core, @gcapnias/mcp-server, @gcapnias/shared-types
 • Running build in 3 packages
-@myapp/shared-types:build: cache miss, executing
-@myapp/api-core:build: cache miss, executing
-@myapp/mcp-server:build: cache miss, executing
+@gcapnias/shared-types:build: cache miss, executing
+@gcapnias/api-core:build: cache miss, executing
+@gcapnias/mcp-server:build: cache miss, executing
 
 Tasks:    3 successful, 3 total
 Cached:    0 cached, 3 total
@@ -827,7 +827,7 @@ The `workspace:*` protocol ensures dependencies are always linked from the works
 ```json
 {
   "dependencies": {
-    "@myapp/shared-types": "workspace:*"
+    "@gcapnias/shared-types": "workspace:*"
   }
 }
 ```

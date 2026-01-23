@@ -120,7 +120,7 @@ All internal dependencies use `workspace:*` for automatic linking:
 ```json
 {
   "dependencies": {
-    "@myapp/shared-types": "workspace:*"
+    "@gcapnias/shared-types": "workspace:*"
   }
 }
 ```
@@ -166,11 +166,11 @@ cd packages/new-package
 # Create package.json
 cat > package.json << EOF
 {
-  "name": "@myapp/new-package",
+  "name": "@gcapnias/new-package",
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@myapp/shared-types": "workspace:*"
+    "@gcapnias/shared-types": "workspace:*"
   }
 }
 EOF

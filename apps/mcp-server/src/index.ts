@@ -1,5 +1,5 @@
-import { DatabaseService } from '@myapp/api-core';
-import type { ServerConfig } from '@myapp/shared-types';
+import { DatabaseService } from '@gcapnias/api-core';
+import type { ServerConfig } from '@gcapnias/shared-types';
 
 const config: ServerConfig = {
   name: 'MCP Server',

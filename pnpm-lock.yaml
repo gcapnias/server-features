@@ -35,10 +35,10 @@ importers:
 
   apps/mcp-server:
     dependencies:
-      '@myapp/api-core':
+      '@gcapnias/api-core':
         specifier: workspace:*
         version: link:../../packages/api-core
-      '@myapp/shared-types':
+      '@gcapnias/shared-types':
         specifier: workspace:*
         version: link:../../packages/shared-types
     devDependencies:
@@ -48,7 +48,7 @@ importers:
 
   packages/api-core:
     dependencies:
-      '@myapp/shared-types':
+      '@gcapnias/shared-types':
         specifier: workspace:*
         version: link:../shared-types
       better-sqlite3:

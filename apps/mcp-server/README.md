@@ -81,8 +81,8 @@ This MCP server demonstrates:
 
 ### Workspace Dependencies
 
-- `@myapp/shared-types`: Shared TypeScript types
-- `@myapp/api-core`: Core API with SQLite database service
+- `@gcapnias/shared-types`: Shared TypeScript types
+- `@gcapnias/api-core`: Core API with SQLite database service
 
 ### Peer Dependencies
 

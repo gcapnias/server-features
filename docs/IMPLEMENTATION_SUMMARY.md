@@ -89,7 +89,7 @@ autocoder-playground/
 
 #### packages/api-core
 
-- ✅ Depends on `@myapp/shared-types@workspace:*`
+- ✅ Depends on `@gcapnias/shared-types@workspace:*`
 - ✅ Includes `better-sqlite3` as dependency
 - ✅ TypeScript references to shared-types
 - ✅ DatabaseService implementation with SQLite
@@ -294,12 +294,12 @@ Turborepo automatically handles build order based on:
 ## 📊 Build Output
 
 ```text
-• Packages in scope: @myapp/api-core, @myapp/mcp-server, @myapp/shared-types
+• Packages in scope: @gcapnias/api-core, @gcapnias/mcp-server, @gcapnias/shared-types
 • Running build in 3 packages
 
-@myapp/shared-types:build: cache miss, executing
-@myapp/api-core:build: cache miss, executing
-@myapp/mcp-server:build: cache miss, executing
+@gcapnias/shared-types:build: cache miss, executing
+@gcapnias/api-core:build: cache miss, executing
+@gcapnias/mcp-server:build: cache miss, executing
 
 Tasks:    3 successful, 3 total
 Cached:    0 cached, 3 total

@@ -1,5 +1,5 @@
 {
-  "name": "@myapp/api-core",
+  "name": "@gcapnias/api-core",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -16,7 +16,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@myapp/shared-types": "workspace:*",
+    "@gcapnias/shared-types": "workspace:*",
     "better-sqlite3": "^11.0.0"
   },
   "devDependencies": {

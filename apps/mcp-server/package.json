@@ -1,5 +1,5 @@
 {
-  "name": "@myapp/mcp-server",
+  "name": "@gcapnias/mcp-server",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,8 +13,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@myapp/api-core": "workspace:*",
-    "@myapp/shared-types": "workspace:*"
+    "@gcapnias/api-core": "workspace:*",
+    "@gcapnias/shared-types": "workspace:*"
   },
   "peerDependencies": {
     "better-sqlite3": "^11.0.0"

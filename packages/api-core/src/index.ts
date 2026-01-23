@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3';
-import type { DatabaseConfig, ApiResponse } from '@myapp/shared-types';
+import type { DatabaseConfig, ApiResponse } from '@gcapnias/shared-types';
 
 /**
  * Core API functionality with SQLite database integration
