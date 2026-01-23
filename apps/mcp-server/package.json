@@ -1,0 +1,25 @@
+{
+  "name": "@myapp/mcp-server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "mcp-server": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --external:better-sqlite3 --banner:js=\"#!/usr/bin/env node\" --outfile=dist/index.js && node -e \"require('fs').chmodSync('dist/index.js', 0o755)\"",
+    "dev": "pnpm build --watch",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@myapp/api-core": "workspace:*",
+    "@myapp/shared-types": "workspace:*"
+  },
+  "peerDependencies": {
+    "better-sqlite3": "^11.0.0"
+  },
+  "devDependencies": {
+    "better-sqlite3": "^11.0.0"
+  }
+}

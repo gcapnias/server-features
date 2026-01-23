@@ -102,7 +102,7 @@ You MUST specify dependencies using `depends_on_indices` for features that logic
 - Features 0-9 should have NO dependencies (foundation/setup features)
 - Features 10+ MUST have at least some dependencies where logical
 - Create WIDE dependency graphs, not linear chains:
-  - BAD:  A -> B -> C -> D -> E (linear chain, only 1 feature can run at a time)
+  - BAD: A -> B -> C -> D -> E (linear chain, only 1 feature can run at a time)
   - GOOD: A -> B, A -> C, A -> D, B -> E, C -> E (wide graph, multiple features can run in parallel)
 
 **Requirements for features:**
@@ -190,10 +190,12 @@ Since feature IDs aren't assigned until after creation, use **array indices** (0
 **REQUIREMENT:** At least 60% of your features (after index 10) should have at least one dependency.
 
 Target structure for a 150-feature project:
+
 - Features 0-9: Foundation (0 dependencies) - App loads, basic setup
 - Features 10-149: At least 84 should have dependencies (60% of 140)
 
 This ensures:
+
 - A good mix of parallelizable features (foundation)
 - Logical ordering for dependent features
 
@@ -232,6 +234,7 @@ enabling parallel execution:
 ```
 
 **Parallelism analysis of this example:**
+
 - Foundation tier: 3 features can run in parallel
 - Auth tier: 3 features wait for foundation, then can run (mostly parallel)
 - CRUD tier: 4 features can start once login passes (all 4 in parallel!)

@@ -97,7 +97,7 @@ You MUST specify dependencies using `depends_on_indices` for features that logic
 - Features 0-9 should have NO dependencies (foundation/setup features)
 - Features 10+ MUST have at least some dependencies where logical
 - Create WIDE dependency graphs, not linear chains:
-  - BAD:  A -> B -> C -> D -> E (linear chain, only 1 feature can run at a time)
+  - BAD: A -> B -> C -> D -> E (linear chain, only 1 feature can run at a time)
   - GOOD: A -> B, A -> C, A -> D, B -> E, C -> E (wide graph, multiple features can run in parallel)
 
 **Requirements for features:**
@@ -663,5 +663,5 @@ Once you have completed the four tasks above:
 3. Leave the environment in a clean, working state
 4. Exit cleanly
 
-**IMPORTANT:** 
+**IMPORTANT:**
 Do NOT attempt to implement any features. Your job is setup only. Feature implementation will be handled by parallel coding agents that spawn after you complete initialization. Starting implementation here would create a bottleneck and defeat the purpose of the parallel architecture.
