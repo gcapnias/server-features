@@ -1,0 +1,12 @@
+{
+  "chat.editor.fontFamily": "Consolas, 'Courier New', monospace",
+  "chat.editor.fontSize": 14,
+  "chat.editor.fontWeight": "default",
+  "chat.fontFamily": "'Gentium Plus', 'Trebuchet MS', 'Segoe UI', sans-serif",
+  "chat.fontSize": 16,
+  "editor.fontFamily": "'Cascadia Code PL', Consolas, 'Courier New', monospace",
+  "editor.fontSize": 15,
+  "editor.fontWeight": "300",
+  "markdown.preview.fontFamily": "'Trebuchet MS', 'Segoe UI', sans-serif",
+  "markdown.preview.fontSize": 15
+}
