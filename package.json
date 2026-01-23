@@ -12,7 +12,10 @@
     "dev": "turbo run dev",
     "test": "turbo run test",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "outdated": "pnpm outdated -r",
+    "audit": "pnpm audit",
+    "update": "pnpm update -i -r"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "8.53.1",

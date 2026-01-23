@@ -29,6 +29,9 @@ cd apps/mcp-server && pnpm build --watch  # Watch specific package
 pnpm test                 # Run all tests
 pnpm lint                 # Lint all packages
 pnpm format               # Format with Prettier
+pnpm outdated             # Check for outdated packages
+pnpm audit                # Run security audit
+pnpm update               # Update packages interactively
 ```
 
 ### Running MCP Server

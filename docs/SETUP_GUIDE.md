@@ -997,6 +997,9 @@ pnpm build            # Build all packages
 pnpm dev              # Watch mode
 pnpm test             # Run tests
 pnpm lint             # Lint code
+pnpm outdated         # Check for outdated packages
+pnpm audit            # Run security audit
+pnpm update           # Update packages interactively
 ```
 
 Happy coding! 🚀

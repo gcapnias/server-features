@@ -203,12 +203,15 @@ npx -p better-sqlite3 .
 node dist/index.js
 ```
 
-### Testing
+### Testing & Maintenance
 
 ```bash
-pnpm test    # Run all tests
-pnpm lint    # Lint all packages
-pnpm format  # Format with Prettier
+pnpm test      # Run all tests
+pnpm lint      # Lint all packages
+pnpm format    # Format with Prettier
+pnpm outdated  # Check for outdated packages
+pnpm audit     # Run security audit
+pnpm update    # Update packages interactively
 ```
 
 ---

@@ -71,6 +71,9 @@ This runs Turborepo in watch mode with auto-rebuild on file changes across all w
 - `pnpm test` - Run tests across all packages
 - `pnpm lint` - Lint all packages
 - `pnpm format` - Format code with Prettier
+- `pnpm outdated` - Check for outdated packages across workspace
+- `pnpm audit` - Run security audit
+- `pnpm update` - Interactively update packages
 
 ## Configuration Files
 
