@@ -6,7 +6,7 @@
     "tasks-mcp-server": "./dist/index.js"
   },
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --platform=node --format=cjs --external:better-sqlite3 --banner:js=\"#!/usr/bin/env node\" --outfile=dist/index.js && node -e \"require('fs').chmodSync('dist/index.js', 0o755)\"",
+    "build": "esbuild src/index.ts --bundle --platform=node --format=cjs --banner:js=\"#!/usr/bin/env node\" --outfile=dist/index.js && node -e \"require('fs').chmodSync('dist/index.js', 0o755)\"",
     "dev": "pnpm build --watch",
     "start": "node dist/index.js",
     "clean": "rm -rf dist",
@@ -21,14 +21,10 @@
     "express": "5.2.1",
     "zod": "^3.24.1"
   },
-  "peerDependencies": {
-    "better-sqlite3": "^12.6.2"
-  },
   "devDependencies": {
     "@types/node": "^22.10.5",
-    "better-sqlite3": "^12.6.2",
     "esbuild": "^0.24.2",
     "typescript": "^5.7.3",
-    "vitest": "^2.1.8"
+    "vitest": "^4.0.18"
   }
 }

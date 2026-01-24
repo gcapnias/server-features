@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import Database from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 import * as path from 'path';
 import {
   create_database,
@@ -50,7 +50,7 @@ describe('database', () => {
   });
 
   describe('create_database', () => {
-    let db: Database.Database;
+    let db: DatabaseSync;
 
     afterEach(() => {
       if (db) {
@@ -71,7 +71,7 @@ describe('database', () => {
       db = result.engine;
 
       // Check that features table exists
-      const tables = db.pragma('table_list') as Array<{ name: string }>;
+      const tables = db.prepare('PRAGMA table_list').all() as Array<{ name: string }>;
       const table_names = tables.map((t) => t.name);
 
       expect(table_names).toContain('features');
@@ -83,7 +83,7 @@ describe('database', () => {
       const result = create_database(':memory:');
       db = result.engine;
 
-      const indexes = db.pragma('index_list(features)') as Array<{ name: string }>;
+      const indexes = db.prepare('PRAGMA index_list(features)').all() as Array<{ name: string }>;
       const index_names = indexes.map((i) => i.name);
 
       expect(index_names.some((n) => n.includes('priority'))).toBe(true);

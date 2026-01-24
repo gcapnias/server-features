@@ -5,7 +5,7 @@
  * SQLite database schema for feature storage matching Python database.py
  */
 
-import Database from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 import * as path from 'path';
 import * as os from 'os';
 import type {
@@ -18,22 +18,37 @@ import type {
  * Session wrapper for database operations
  */
 export class Session {
-  constructor(public db: Database.Database) {}
+  constructor(public db: DatabaseSync) {}
 
   /**
    * Execute a query that returns rows
    */
   query<T>(sql: string, ...params: any[]): T[] {
     const stmt = this.db.prepare(sql);
-    return stmt.all(...params) as T[];
+    // node:sqlite expects individual positional params
+    // Check if first param is an array - if so, spread it
+    if (params.length === 1 && Array.isArray(params[0])) {
+      return stmt.all(...params[0]) as T[];
+    }
+    // Otherwise pass params as is
+    return (params.length > 0 ? stmt.all(...params) : stmt.all()) as T[];
   }
 
   /**
    * Execute a statement that modifies data
    */
-  execute(sql: string, ...params: any[]): Database.RunResult {
+  execute(
+    sql: string,
+    ...params: any[]
+  ): { changes: number | bigint; lastInsertRowid: number | bigint } {
     const stmt = this.db.prepare(sql);
-    return stmt.run(...params);
+    // node:sqlite expects individual positional params
+    // Check if first param is an array - if so, spread it
+    if (params.length === 1 && Array.isArray(params[0])) {
+      return stmt.run(...params[0]);
+    }
+    // Otherwise pass params as is
+    return params.length > 0 ? stmt.run(...params) : stmt.run();
   }
 
   /**
@@ -254,8 +269,8 @@ export function get_database_url(project_dir?: string): string {
  * Python: def _migrate_add_in_progress_column(engine) -> None
  * @param db - better-sqlite3 Database instance
  */
-function _migrate_add_in_progress_column(db: Database.Database): void {
-  const columns = db.pragma('table_info(features)') as Array<{ name: string }>;
+function _migrate_add_in_progress_column(db: DatabaseSync): void {
+  const columns = db.prepare('PRAGMA table_info(features)').all() as Array<{ name: string }>;
   const column_names = columns.map((c) => c.name);
 
   if (!column_names.includes('in_progress')) {
@@ -268,7 +283,7 @@ function _migrate_add_in_progress_column(db: Database.Database): void {
  * Python: def _migrate_fix_null_boolean_fields(engine) -> None
  * @param db - better-sqlite3 Database instance
  */
-function _migrate_fix_null_boolean_fields(db: Database.Database): void {
+function _migrate_fix_null_boolean_fields(db: DatabaseSync): void {
   db.exec('UPDATE features SET passes = 0 WHERE passes IS NULL');
   db.exec('UPDATE features SET in_progress = 0 WHERE in_progress IS NULL');
 }
@@ -278,8 +293,8 @@ function _migrate_fix_null_boolean_fields(db: Database.Database): void {
  * Python: def _migrate_add_dependencies_column(engine) -> None
  * @param db - better-sqlite3 Database instance
  */
-function _migrate_add_dependencies_column(db: Database.Database): void {
-  const columns = db.pragma('table_info(features)') as Array<{ name: string }>;
+function _migrate_add_dependencies_column(db: DatabaseSync): void {
+  const columns = db.prepare('PRAGMA table_info(features)').all() as Array<{ name: string }>;
   const column_names = columns.map((c) => c.name);
 
   if (!column_names.includes('dependencies')) {
@@ -292,7 +307,7 @@ function _migrate_add_dependencies_column(db: Database.Database): void {
  * Python: def _migrate_add_testing_columns(engine) -> None
  * Kept for backwards compatibility
  */
-function _migrate_add_testing_columns(db: Database.Database): void {
+function _migrate_add_testing_columns(db: DatabaseSync): void {
   // No-op, originally added removed columns
 }
 
@@ -345,7 +360,7 @@ export function _is_network_path(filepath: string): boolean {
  * Python: def _migrate_add_schedules_tables(engine) -> None
  * @param db - better-sqlite3 Database instance
  */
-function _migrate_add_schedules_tables(db: Database.Database): void {
+function _migrate_add_schedules_tables(db: DatabaseSync): void {
   // Create schedules table if not exists
   db.exec(`
     CREATE TABLE IF NOT EXISTS schedules (
@@ -383,7 +398,7 @@ function _migrate_add_schedules_tables(db: Database.Database): void {
   `);
 
   // Add missing columns for upgrades
-  const columns = db.pragma('table_info(schedules)') as Array<{ name: string }>;
+  const columns = db.prepare('PRAGMA table_info(schedules)').all() as Array<{ name: string }>;
   const column_names = columns.map((c) => c.name);
 
   if (!column_names.includes('crash_count')) {
@@ -402,12 +417,12 @@ function _migrate_add_schedules_tables(db: Database.Database): void {
  * @returns Tuple of [Database instance, session factory]
  */
 export function create_database(db_path?: string): {
-  engine: Database.Database;
+  engine: DatabaseSync;
   session_maker: () => Session;
 } {
   const path = db_path || get_database_path();
 
-  const db = new Database(path, {
+  const db = new DatabaseSync(path, {
     timeout: 30000, // 30s timeout for locks
   });
 
@@ -435,8 +450,7 @@ export function create_database(db_path?: string): {
   // Choose journal mode based on filesystem type
   const is_network = _is_network_path(path);
   const journal_mode = is_network ? 'DELETE' : 'WAL';
-  db.pragma(`journal_mode = ${journal_mode}`);
-  db.pragma('busy_timeout = 30000');
+  db.exec(`PRAGMA journal_mode = ${journal_mode}`);
 
   // Run migrations
   _migrate_add_in_progress_column(db);
