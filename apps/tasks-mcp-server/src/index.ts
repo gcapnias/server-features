@@ -29,7 +29,7 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import * as z from 'zod';
+import { z } from 'zod';
 import * as path from 'node:path';
 import {
   initializeDatabase,
@@ -93,13 +93,7 @@ server.registerTool(
     title: 'Get Feature Statistics',
     description:
       'Get statistics about feature completion progress. Returns passing, in-progress, total, and percentage.',
-    inputSchema: {},
-    outputSchema: {
-      passing: z.number(),
-      in_progress: z.number(),
-      total: z.number(),
-      percentage: z.number(),
-    },
+    inputSchema: z.object({}),
   },
   async () => {
     const result = feature_get_stats();
@@ -116,10 +110,9 @@ server.registerTool(
   {
     title: 'Get Feature By ID',
     description: 'Get a specific feature by its ID with full details',
-    inputSchema: {
+    inputSchema: z.object({
       feature_id: z.number().int().min(1).describe('The ID of the feature to retrieve'),
-    },
-    outputSchema: z.any(),
+    }),
   },
   async ({ feature_id }) => {
     const result = feature_get_by_id(feature_id);
@@ -136,10 +129,9 @@ server.registerTool(
   {
     title: 'Get Feature Summary',
     description: 'Get minimal feature info: id, name, status, and dependencies only',
-    inputSchema: {
+    inputSchema: z.object({
       feature_id: z.number().int().min(1).describe('The ID of the feature'),
-    },
-    outputSchema: z.any(),
+    }),
   },
   async ({ feature_id }) => {
     const result = feature_get_summary(feature_id);
@@ -156,10 +148,7 @@ server.registerTool(
   {
     title: 'Mark Feature as Passing',
     description: 'Mark a feature as passing after successful implementation',
-    inputSchema: {
-      feature_id: z.number().int().min(1).describe('The ID of the feature to mark as passing'),
-    },
-    outputSchema: z.any(),
+    inputSchema: MarkPassingInput,
   },
   async ({ feature_id }) => {
     const result = feature_mark_passing(feature_id);
@@ -176,10 +165,7 @@ server.registerTool(
   {
     title: 'Mark Feature as Failing',
     description: 'Mark a feature as failing after finding a regression',
-    inputSchema: {
-      feature_id: z.number().int().min(1).describe('The ID of the feature to mark as failing'),
-    },
-    outputSchema: z.any(),
+    inputSchema: MarkFailingInput,
   },
   async ({ feature_id }) => {
     const result = feature_mark_failing(feature_id);
@@ -196,10 +182,7 @@ server.registerTool(
   {
     title: 'Skip Feature',
     description: 'Skip a feature by moving it to the end of the priority queue',
-    inputSchema: {
-      feature_id: z.number().int().min(1).describe('The ID of the feature to skip'),
-    },
-    outputSchema: z.any(),
+    inputSchema: SkipFeatureInput,
   },
   async ({ feature_id }) => {
     const result = feature_skip(feature_id);
@@ -216,10 +199,7 @@ server.registerTool(
   {
     title: 'Mark Feature In Progress',
     description: 'Mark a feature as in-progress to prevent other agents from working on it',
-    inputSchema: {
-      feature_id: z.number().int().min(1).describe('The ID of the feature to mark as in-progress'),
-    },
-    outputSchema: z.any(),
+    inputSchema: MarkInProgressInput,
   },
   async ({ feature_id }) => {
     const result = feature_mark_in_progress(feature_id);
@@ -236,10 +216,7 @@ server.registerTool(
   {
     title: 'Claim and Get Feature',
     description: 'Atomically claim a feature (mark in-progress) and return its full details',
-    inputSchema: {
-      feature_id: z.number().int().min(1).describe('The ID of the feature to claim'),
-    },
-    outputSchema: z.any(),
+    inputSchema: ClaimAndGetInput,
   },
   async ({ feature_id }) => {
     const result = feature_claim_and_get(feature_id);
@@ -256,14 +233,7 @@ server.registerTool(
   {
     title: 'Clear In Progress Status',
     description: 'Clear in-progress status from a feature',
-    inputSchema: {
-      feature_id: z
-        .number()
-        .int()
-        .min(1)
-        .describe('The ID of the feature to clear in-progress status'),
-    },
-    outputSchema: z.any(),
+    inputSchema: ClearInProgressInput,
   },
   async ({ feature_id }) => {
     const result = feature_clear_in_progress(feature_id);
@@ -280,24 +250,7 @@ server.registerTool(
   {
     title: 'Create Multiple Features',
     description: 'Create multiple features in a single operation with dependencies',
-    inputSchema: {
-      features: z
-        .array(
-          z.object({
-            category: z.string().min(1).max(100).describe('Feature category'),
-            name: z.string().min(1).max(255).describe('Feature name'),
-            description: z.string().min(1).describe('Detailed description'),
-            steps: z.array(z.string()).min(1).describe('Implementation/test steps'),
-            depends_on_indices: z
-              .array(z.number().int().min(0))
-              .optional()
-              .describe('Array indices of features in batch that this feature depends on'),
-          })
-        )
-        .min(1)
-        .describe('List of features to create'),
-    },
-    outputSchema: z.any(),
+    inputSchema: BulkCreateInput,
   },
   async ({ features }) => {
     const result = feature_create_bulk(features);
@@ -314,17 +267,7 @@ server.registerTool(
   {
     title: 'Create Single Feature',
     description: 'Create a single feature in the project backlog',
-    inputSchema: {
-      category: z
-        .string()
-        .min(1)
-        .max(100)
-        .describe('Feature category (e.g., "Authentication", "API", "UI")'),
-      name: z.string().min(1).max(255).describe('Feature name'),
-      description: z.string().min(1).describe('Detailed description of the feature'),
-      steps: z.array(z.string()).min(1).describe('List of implementation/verification steps'),
-    },
-    outputSchema: z.any(),
+    inputSchema: CreateFeatureInput,
   },
   async ({ category, name, description, steps }) => {
     const result = feature_create(category, name, description, steps);
@@ -341,11 +284,7 @@ server.registerTool(
   {
     title: 'Add Dependency',
     description: 'Add a dependency relationship between features',
-    inputSchema: {
-      feature_id: z.number().int().min(1).describe('Feature to add dependency to'),
-      dependency_id: z.number().int().min(1).describe('ID of the dependency feature'),
-    },
-    outputSchema: z.any(),
+    inputSchema: AddDependencyInput,
   },
   async ({ feature_id, dependency_id }) => {
     const result = feature_add_dependency(feature_id, dependency_id);
@@ -362,11 +301,7 @@ server.registerTool(
   {
     title: 'Remove Dependency',
     description: 'Remove a dependency from a feature',
-    inputSchema: {
-      feature_id: z.number().int().min(1).describe('Feature to remove dependency from'),
-      dependency_id: z.number().int().min(1).describe('ID of dependency to remove'),
-    },
-    outputSchema: z.any(),
+    inputSchema: RemoveDependencyInput,
   },
   async ({ feature_id, dependency_id }) => {
     const result = feature_remove_dependency(feature_id, dependency_id);
@@ -383,10 +318,7 @@ server.registerTool(
   {
     title: 'Get Ready Features',
     description: 'Get all features ready to start (dependencies satisfied, not in progress)',
-    inputSchema: {
-      limit: z.number().int().min(1).max(50).default(10).describe('Max features to return'),
-    },
-    outputSchema: z.any(),
+    inputSchema: GetReadyInput,
   },
   async ({ limit = 10 }) => {
     const result = feature_get_ready(limit);
@@ -403,10 +335,7 @@ server.registerTool(
   {
     title: 'Get Blocked Features',
     description: 'Get features that are blocked by unmet dependencies',
-    inputSchema: {
-      limit: z.number().int().min(1).max(100).default(20).describe('Max features to return'),
-    },
-    outputSchema: z.any(),
+    inputSchema: GetBlockedInput,
   },
   async ({ limit = 20 }) => {
     const result = feature_get_blocked(limit);
@@ -424,7 +353,6 @@ server.registerTool(
     title: 'Get Dependency Graph',
     description: 'Get dependency graph data for visualization',
     inputSchema: {},
-    outputSchema: z.any(),
   },
   async () => {
     const result = feature_get_graph();
@@ -441,11 +369,7 @@ server.registerTool(
   {
     title: 'Set All Dependencies',
     description: 'Set all dependencies for a feature at once, replacing any existing dependencies',
-    inputSchema: {
-      feature_id: z.number().int().min(1).describe('Feature to set dependencies for'),
-      dependency_ids: z.array(z.number().int().min(1)).describe('List of dependency feature IDs'),
-    },
-    outputSchema: z.any(),
+    inputSchema: SetDependenciesInput,
   },
   async ({ feature_id, dependency_ids }) => {
     const result = feature_set_dependencies(feature_id, dependency_ids);

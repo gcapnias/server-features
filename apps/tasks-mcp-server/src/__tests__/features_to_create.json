@@ -1,0 +1,802 @@
+[
+  {
+    "category": "functional",
+    "name": "Initialize Vite React TypeScript Project",
+    "description": "Create a new Vite project with React 18+ and TypeScript template, ensuring proper configuration for modern development",
+    "steps": [
+      "Verify package.json exists with react, react-dom, and typescript dependencies",
+      "Verify vite.config.ts exists with React plugin configured",
+      "Verify tsconfig.json exists with strict mode enabled",
+      "Verify src/main.tsx exists as the entry point",
+      "Run npm install successfully without errors",
+      "Run npm run dev and verify development server starts"
+    ]
+  },
+  {
+    "category": "functional",
+    "name": "Install and Configure Tailwind CSS",
+    "description": "Set up Tailwind CSS following official documentation with PostCSS configuration",
+    "steps": [
+      "Verify tailwindcss, postcss, and autoprefixer are in devDependencies",
+      "Verify tailwind.config.js exists with content paths configured",
+      "Verify postcss.config.js exists with tailwind and autoprefixer plugins",
+      "Verify src/index.css contains Tailwind directives (@tailwind base, components, utilities)",
+      "Verify Tailwind classes render correctly in a test component"
+    ]
+  },
+  {
+    "category": "functional",
+    "name": "Install and Configure Shadcn UI",
+    "description": "Set up Shadcn UI component library with proper configuration for the project",
+    "steps": [
+      "Verify components.json exists with Shadcn configuration",
+      "Verify src/components/ui directory exists for Shadcn components",
+      "Verify src/lib/utils.ts exists with cn utility function",
+      "Verify CSS variables are configured in index.css for theming",
+      "Verify at least one Shadcn component can be imported and rendered"
+    ]
+  },
+  {
+    "category": "functional",
+    "name": "Configure React Router",
+    "description": "Set up React Router with routes for home (/) and favorites (/favorites) pages",
+    "steps": [
+      "Verify react-router-dom is in dependencies",
+      "Verify BrowserRouter wraps the App component in main.tsx",
+      "Verify Routes component contains Route for / path",
+      "Verify Routes component contains Route for /favorites path",
+      "Navigate to / and verify home page renders",
+      "Navigate to /favorites and verify favorites page renders"
+    ]
+  },
+  {
+    "category": "functional",
+    "name": "Create Environment Configuration",
+    "description": "Set up environment variable handling for TMDB API key with example file",
+    "steps": [
+      "Verify .env.example file exists with VITE_TMDB_API_KEY placeholder",
+      "Verify .gitignore includes .env file",
+      "Verify environment variable can be accessed via import.meta.env.VITE_TMDB_API_KEY",
+      "Document API key setup instructions in .env.example"
+    ]
+  },
+  {
+    "category": "functional",
+    "name": "Create TMDB API Service Module",
+    "description": "Create a service module for making TMDB API calls with proper typing",
+    "steps": [
+      "Verify src/services/tmdb.ts or similar file exists",
+      "Verify TypeScript interfaces for Movie and API response types are defined",
+      "Verify function to search movies by query exists",
+      "Verify function to fetch trending/popular movies exists",
+      "Verify API base URL and key are properly configured",
+      "Verify proper error handling in API functions"
+    ]
+  },
+  {
+    "category": "functional",
+    "name": "Create Local Storage Favorites Service",
+    "description": "Create a service module for managing favorites in browser Local Storage",
+    "steps": [
+      "Verify favorites service file exists (e.g., src/services/favorites.ts)",
+      "Verify function to get all favorites from localStorage exists",
+      "Verify function to add a movie to favorites exists",
+      "Verify function to remove a movie from favorites exists",
+      "Verify function to check if a movie is favorited exists",
+      "Verify favorites persist after page refresh"
+    ]
+  },
+  {
+    "category": "functional",
+    "name": "Create App Root Component with Router",
+    "description": "Set up the main App component with routing structure and layout",
+    "steps": [
+      "Verify App.tsx exists with proper component structure",
+      "Verify App component renders Header component",
+      "Verify App component renders Routes with Outlet or route elements",
+      "Verify main content area has proper container styling",
+      "Verify App passes favorites state down to child components"
+    ]
+  },
+  {
+    "category": "style",
+    "name": "Configure Dark Theme Base Styles",
+    "description": "Set up dark theme CSS variables and base styling with amber/gold accents",
+    "steps": [
+      "Verify dark background color is applied to body/html (e.g., slate-900 or similar)",
+      "Verify text color defaults to light color for readability",
+      "Verify amber/gold accent color variables are defined",
+      "Verify Shadcn theme variables are configured for dark mode",
+      "Verify no white flash on page load"
+    ]
+  },
+  {
+    "category": "functional",
+    "name": "Create Page Components Shell",
+    "description": "Create basic shell components for Home and Favorites pages",
+    "steps": [
+      "Verify src/pages/HomePage.tsx or similar exists",
+      "Verify src/pages/FavoritesPage.tsx or similar exists",
+      "Verify HomePage renders without errors",
+      "Verify FavoritesPage renders without errors",
+      "Verify pages accept necessary props for state management"
+    ]
+  },
+  {
+    "category": "functional",
+    "name": "Create Fixed Header Component",
+    "description": "Build a fixed header that stays at the top of the viewport during scroll",
+    "steps": [
+      "Verify Header component exists in src/components",
+      "Verify header has position fixed and full width",
+      "Verify header stays visible when scrolling down the page",
+      "Verify header has appropriate z-index to stay above content",
+      "Verify main content has top padding/margin to account for fixed header"
+    ],
+    "depends_on_indices": [0, 1, 2, 8]
+  },
+  {
+    "category": "functional",
+    "name": "Add App Logo and Title to Header",
+    "description": "Display application logo/title on the left side of the header",
+    "steps": [
+      "Verify logo or app title is visible in header",
+      "Verify logo/title is positioned on the left side",
+      "Verify logo/title uses amber/gold accent color",
+      "Verify clicking logo navigates to home page",
+      "Verify logo has appropriate sizing and styling"
+    ],
+    "depends_on_indices": [10]
+  },
+  {
+    "category": "functional",
+    "name": "Add Navigation Links to Header",
+    "description": "Create navigation links for Search (home) and Favorites pages in header",
+    "steps": [
+      "Verify Search/Home link exists in header navigation",
+      "Verify Favorites link exists in header navigation",
+      "Verify Search link navigates to / route",
+      "Verify Favorites link navigates to /favorites route",
+      "Verify navigation links are properly spaced and styled"
+    ],
+    "depends_on_indices": [3, 10]
+  },
+  {
+    "category": "style",
+    "name": "Style Active Navigation Link",
+    "description": "Apply visual distinction to the currently active navigation link",
+    "steps": [
+      "Verify active nav link has different styling than inactive links",
+      "Verify active state uses amber/gold accent color or underline",
+      "Verify active state updates when navigating between pages",
+      "Verify Search link shows active on / route",
+      "Verify Favorites link shows active on /favorites route"
+    ],
+    "depends_on_indices": [12]
+  },
+  {
+    "category": "functional",
+    "name": "Add Favorites Count Badge to Header",
+    "description": "Display a badge showing the number of favorited movies next to Favorites link",
+    "steps": [
+      "Verify badge appears near Favorites navigation link",
+      "Verify badge displays correct count of favorited movies",
+      "Verify badge updates when favorites are added or removed",
+      "Verify badge shows 0 or is hidden when no favorites exist",
+      "Verify badge has contrasting background for visibility"
+    ],
+    "depends_on_indices": [6, 12]
+  },
+  {
+    "category": "style",
+    "name": "Style Header for Dark Theme",
+    "description": "Apply dark theme styling to header with proper contrast and shadows",
+    "steps": [
+      "Verify header has dark background color",
+      "Verify header text is light colored for contrast",
+      "Verify header has subtle bottom border or shadow",
+      "Verify header maintains amber/gold accent theme",
+      "Verify header looks cohesive with overall dark design"
+    ],
+    "depends_on_indices": [8, 10]
+  },
+  {
+    "category": "functional",
+    "name": "Create Search Input Component",
+    "description": "Build a search input field for entering movie search queries",
+    "steps": [
+      "Verify search input exists on home page",
+      "Verify input has placeholder text like Search movies...",
+      "Verify input value is controlled by React state",
+      "Verify input accepts keyboard input",
+      "Verify input has proper styling for dark theme"
+    ],
+    "depends_on_indices": [2, 9]
+  },
+  {
+    "category": "functional",
+    "name": "Trigger Search on Enter Key",
+    "description": "Execute movie search when user presses Enter key in search input",
+    "steps": [
+      "Type a movie name in search input",
+      "Press Enter key",
+      "Verify search function is called with input value",
+      "Verify search does not trigger on other key presses",
+      "Verify empty search input does not trigger API call"
+    ],
+    "depends_on_indices": [5, 16]
+  },
+  {
+    "category": "functional",
+    "name": "Fetch and Display Search Results",
+    "description": "Call TMDB search API and display matching movies in results area",
+    "steps": [
+      "Enter a search query and press Enter",
+      "Verify API call is made to TMDB search endpoint",
+      "Verify search results are displayed after API response",
+      "Verify multiple movies are shown for broad search terms",
+      "Verify results match the search query"
+    ],
+    "depends_on_indices": [5, 17]
+  },
+  {
+    "category": "functional",
+    "name": "Display Loading State During Search",
+    "description": "Show loading indicator while search API request is in progress",
+    "steps": [
+      "Initiate a search",
+      "Verify loading indicator appears while waiting for response",
+      "Verify loading indicator disappears when results load",
+      "Verify loading state prevents multiple simultaneous searches",
+      "Verify loading indicator is visually appropriate for dark theme"
+    ],
+    "depends_on_indices": [18]
+  },
+  {
+    "category": "functional",
+    "name": "Display Empty Search Results Message",
+    "description": "Show appropriate message when search returns no results",
+    "steps": [
+      "Search for a query that returns no results (e.g., xyznonexistent123)",
+      "Verify message No movies found. Try a different search term. appears",
+      "Verify empty state is styled appropriately",
+      "Verify user can initiate a new search from empty state"
+    ],
+    "depends_on_indices": [18]
+  },
+  {
+    "category": "functional",
+    "name": "Handle Search API Errors",
+    "description": "Display user-friendly error message when search API fails",
+    "steps": [
+      "Simulate API error (invalid key or network issue)",
+      "Verify error message is displayed to user",
+      "Verify error message is helpful and not technical",
+      "Verify user can retry search after error",
+      "Verify error state clears on successful search"
+    ],
+    "depends_on_indices": [18]
+  },
+  {
+    "category": "functional",
+    "name": "Fetch Trending Movies on Page Load",
+    "description": "Automatically load trending/popular movies when home page first loads",
+    "steps": [
+      "Navigate to home page",
+      "Verify trending movies API is called on mount",
+      "Verify trending movies are displayed in grid",
+      "Verify trending movies load without user interaction",
+      "Verify loading state shows while fetching"
+    ],
+    "depends_on_indices": [5, 9]
+  },
+  {
+    "category": "functional",
+    "name": "Create Movie Card Component",
+    "description": "Build reusable movie card component for displaying movie information",
+    "steps": [
+      "Verify MovieCard component exists",
+      "Verify component accepts movie data as props",
+      "Verify component renders without errors",
+      "Verify component has proper TypeScript typing",
+      "Verify component is used in both search results and favorites"
+    ],
+    "depends_on_indices": [0, 1, 2]
+  },
+  {
+    "category": "functional",
+    "name": "Display Movie Poster Image",
+    "description": "Show movie poster image on card fetched from TMDB image URL",
+    "steps": [
+      "Verify poster image is displayed on movie card",
+      "Verify image uses correct TMDB image base URL",
+      "Verify image has appropriate size (w342 or w500)",
+      "Verify image has alt text for accessibility",
+      "Verify image loads correctly from TMDB CDN"
+    ],
+    "depends_on_indices": [23]
+  },
+  {
+    "category": "functional",
+    "name": "Display Movie Title on Card",
+    "description": "Show movie title prominently on the movie card",
+    "steps": [
+      "Verify movie title is displayed on card",
+      "Verify title is readable and properly sized",
+      "Verify long titles are truncated or wrapped appropriately",
+      "Verify title has good contrast on dark background"
+    ],
+    "depends_on_indices": [23]
+  },
+  {
+    "category": "functional",
+    "name": "Display Movie Release Date",
+    "description": "Show the full release date on each movie card",
+    "steps": [
+      "Verify release date is displayed on movie card",
+      "Verify date format is human-readable (e.g., January 15, 2024)",
+      "Verify date is positioned consistently on cards",
+      "Verify missing dates are handled gracefully"
+    ],
+    "depends_on_indices": [23]
+  },
+  {
+    "category": "functional",
+    "name": "Display Movie Rating",
+    "description": "Show movie rating score on the card (numeric or star format)",
+    "steps": [
+      "Verify rating is displayed on movie card",
+      "Verify rating shows TMDB vote_average value",
+      "Verify rating is formatted appropriately (e.g., 7.5/10 or stars)",
+      "Verify rating uses amber/gold color for visual accent",
+      "Verify movies without ratings show appropriate fallback"
+    ],
+    "depends_on_indices": [23]
+  },
+  {
+    "category": "functional",
+    "name": "Add Favorite Heart Icon to Card",
+    "description": "Display clickable heart icon on movie card for favoriting",
+    "steps": [
+      "Verify heart icon is visible on movie card",
+      "Verify heart icon is clickable",
+      "Verify heart icon has hover state",
+      "Verify heart icon is positioned consistently (e.g., top-right corner)",
+      "Verify heart icon is accessible via keyboard"
+    ],
+    "depends_on_indices": [23]
+  },
+  {
+    "category": "functional",
+    "name": "Show Outlined Heart for Non-Favorited Movies",
+    "description": "Display outlined/empty heart icon when movie is not in favorites",
+    "steps": [
+      "View a movie that is not favorited",
+      "Verify heart icon appears as outline only",
+      "Verify heart color is appropriate for dark theme",
+      "Verify outlined state is visually distinct from filled"
+    ],
+    "depends_on_indices": [6, 28]
+  },
+  {
+    "category": "functional",
+    "name": "Show Filled Red Heart for Favorited Movies",
+    "description": "Display filled red heart icon when movie is in favorites list",
+    "steps": [
+      "View a movie that is in favorites",
+      "Verify heart icon appears filled with red color",
+      "Verify filled state is clearly distinguishable from outline",
+      "Verify heart updates to filled when movie is added to favorites"
+    ],
+    "depends_on_indices": [6, 28]
+  },
+  {
+    "category": "functional",
+    "name": "Display Placeholder for Missing Posters",
+    "description": "Show placeholder image when movie poster is not available",
+    "steps": [
+      "Find a movie with null or missing poster_path",
+      "Verify placeholder image is displayed instead of broken image",
+      "Verify placeholder has appropriate styling",
+      "Verify placeholder maintains card layout consistency"
+    ],
+    "depends_on_indices": [24]
+  },
+  {
+    "category": "style",
+    "name": "Add Hover Effects to Movie Cards",
+    "description": "Apply visual feedback when user hovers over movie card",
+    "steps": [
+      "Hover mouse over a movie card",
+      "Verify card has visual change (scale, shadow, or border)",
+      "Verify hover effect is smooth with transition",
+      "Verify hover effect works consistently across all cards"
+    ],
+    "depends_on_indices": [23]
+  },
+  {
+    "category": "style",
+    "name": "Style Movie Card with Shadow and Elevation",
+    "description": "Apply elevated card style with shadow for depth perception",
+    "steps": [
+      "Verify movie cards have shadow effect",
+      "Verify shadow is visible against dark background",
+      "Verify cards appear elevated above background",
+      "Verify shadow intensity is appropriate for design"
+    ],
+    "depends_on_indices": [23, 8]
+  },
+  {
+    "category": "style",
+    "name": "Create Responsive Movie Grid Layout",
+    "description": "Build responsive grid that adjusts columns based on screen width",
+    "steps": [
+      "View grid on large desktop screen",
+      "Verify 4 columns of cards are displayed",
+      "Resize to tablet width",
+      "Verify 3 columns are displayed",
+      "Resize to mobile width",
+      "Verify 2 columns are displayed"
+    ],
+    "depends_on_indices": [1, 23]
+  },
+  {
+    "category": "style",
+    "name": "Add Consistent Grid Spacing",
+    "description": "Apply uniform gaps between movie cards in grid",
+    "steps": [
+      "Verify consistent horizontal spacing between cards",
+      "Verify consistent vertical spacing between rows",
+      "Verify spacing is maintained at all screen sizes",
+      "Verify spacing uses appropriate Tailwind gap utilities"
+    ],
+    "depends_on_indices": [34]
+  },
+  {
+    "category": "functional",
+    "name": "Create Pagination Component",
+    "description": "Build pagination controls for navigating through search results",
+    "steps": [
+      "Verify Pagination component exists",
+      "Verify component accepts current page and total pages props",
+      "Verify component renders page numbers",
+      "Verify component has previous and next buttons",
+      "Verify component calls callback on page change"
+    ],
+    "depends_on_indices": [2, 0]
+  },
+  {
+    "category": "functional",
+    "name": "Display Page Numbers in Pagination",
+    "description": "Show clickable page numbers for direct navigation",
+    "steps": [
+      "Perform search with many results",
+      "Verify page numbers are displayed",
+      "Click on page number",
+      "Verify results update to that page",
+      "Verify clicked page becomes current"
+    ],
+    "depends_on_indices": [36]
+  },
+  {
+    "category": "functional",
+    "name": "Add Previous Page Button",
+    "description": "Include button to navigate to the previous page of results",
+    "steps": [
+      "Navigate to page 2 of results",
+      "Click Previous button",
+      "Verify page changes to 1",
+      "Verify results update to page 1 content"
+    ],
+    "depends_on_indices": [36]
+  },
+  {
+    "category": "functional",
+    "name": "Add Next Page Button",
+    "description": "Include button to navigate to the next page of results",
+    "steps": [
+      "View page 1 of multi-page results",
+      "Click Next button",
+      "Verify page changes to 2",
+      "Verify results update to page 2 content"
+    ],
+    "depends_on_indices": [36]
+  },
+  {
+    "category": "style",
+    "name": "Highlight Current Page Number",
+    "description": "Apply distinct styling to indicate the current active page",
+    "steps": [
+      "View pagination with multiple pages",
+      "Verify current page number has different styling",
+      "Verify current page uses amber/gold accent color",
+      "Navigate to different page",
+      "Verify highlight moves to new current page"
+    ],
+    "depends_on_indices": [37]
+  },
+  {
+    "category": "functional",
+    "name": "Disable Previous Button on First Page",
+    "description": "Prevent Previous button click when on page 1",
+    "steps": [
+      "Navigate to page 1 of results",
+      "Verify Previous button is disabled or hidden",
+      "Verify clicking disabled button has no effect",
+      "Navigate to page 2",
+      "Verify Previous button becomes enabled"
+    ],
+    "depends_on_indices": [38]
+  },
+  {
+    "category": "functional",
+    "name": "Disable Next Button on Last Page",
+    "description": "Prevent Next button click when on final page of results",
+    "steps": [
+      "Navigate to the last page of results",
+      "Verify Next button is disabled or hidden",
+      "Verify clicking disabled button has no effect",
+      "Navigate to previous page",
+      "Verify Next button becomes enabled"
+    ],
+    "depends_on_indices": [39]
+  },
+  {
+    "category": "functional",
+    "name": "Hide Pagination for Single Page Results",
+    "description": "Do not show pagination when results fit on one page",
+    "steps": [
+      "Perform search with few results (single page)",
+      "Verify pagination is not displayed",
+      "Perform search with many results",
+      "Verify pagination appears"
+    ],
+    "depends_on_indices": [36, 18]
+  },
+  {
+    "category": "functional",
+    "name": "Toggle Add Movie to Favorites",
+    "description": "Add movie to favorites when clicking heart on non-favorited movie",
+    "steps": [
+      "Find a movie not in favorites",
+      "Click the heart icon",
+      "Verify movie is added to favorites",
+      "Verify heart icon changes to filled red",
+      "Verify header favorites count increases"
+    ],
+    "depends_on_indices": [6, 29, 30, 14]
+  },
+  {
+    "category": "functional",
+    "name": "Toggle Remove Movie from Favorites",
+    "description": "Remove movie from favorites when clicking heart on favorited movie",
+    "steps": [
+      "Find a movie in favorites",
+      "Click the filled heart icon",
+      "Verify movie is removed from favorites",
+      "Verify heart icon changes to outline",
+      "Verify header favorites count decreases"
+    ],
+    "depends_on_indices": [44]
+  },
+  {
+    "category": "functional",
+    "name": "Persist Favorites to Local Storage",
+    "description": "Save favorites array to localStorage whenever it changes",
+    "steps": [
+      "Add a movie to favorites",
+      "Open browser developer tools",
+      "Check localStorage for favorites key",
+      "Verify movie data is stored in localStorage",
+      "Remove movie and verify localStorage updates"
+    ],
+    "depends_on_indices": [44, 45]
+  },
+  {
+    "category": "functional",
+    "name": "Load Favorites from Local Storage on Init",
+    "description": "Restore favorites from localStorage when application starts",
+    "steps": [
+      "Add several movies to favorites",
+      "Refresh the page",
+      "Verify favorites are restored",
+      "Verify header badge shows correct count",
+      "Verify heart icons show filled state for favorited movies"
+    ],
+    "depends_on_indices": [46]
+  },
+  {
+    "category": "functional",
+    "name": "Display Favorites on Favorites Page",
+    "description": "Show all favorited movies in grid on /favorites route",
+    "steps": [
+      "Add several movies to favorites",
+      "Navigate to /favorites page",
+      "Verify all favorited movies are displayed",
+      "Verify movies appear in same card format as search results",
+      "Verify grid layout is consistent with home page"
+    ],
+    "depends_on_indices": [9, 47, 34]
+  },
+  {
+    "category": "functional",
+    "name": "Show Empty State on Favorites Page",
+    "description": "Display helpful message when user has no favorites",
+    "steps": [
+      "Remove all favorites",
+      "Navigate to /favorites page",
+      "Verify empty state message is displayed",
+      "Verify message suggests adding favorites",
+      "Verify link or button to go to search exists"
+    ],
+    "depends_on_indices": [48]
+  },
+  {
+    "category": "functional",
+    "name": "Remove Favorites from Favorites Page",
+    "description": "Allow unfavoriting movies directly from favorites page",
+    "steps": [
+      "Navigate to /favorites with some favorites",
+      "Click heart icon on a favorited movie",
+      "Verify movie is removed from favorites list",
+      "Verify movie disappears from favorites page",
+      "Verify header count updates"
+    ],
+    "depends_on_indices": [48, 45]
+  },
+  {
+    "category": "functional",
+    "name": "Preserve Search Query in State",
+    "description": "Maintain search query when navigating away and back",
+    "steps": [
+      "Enter a search query and search",
+      "Navigate to /favorites page",
+      "Navigate back to home page",
+      "Verify search input still shows previous query",
+      "Verify search results are still displayed"
+    ],
+    "depends_on_indices": [16, 18, 12]
+  },
+  {
+    "category": "functional",
+    "name": "Preserve Current Page in State",
+    "description": "Maintain pagination position when navigating away and back",
+    "steps": [
+      "Search and navigate to page 3",
+      "Navigate to /favorites",
+      "Navigate back to home",
+      "Verify page 3 is still selected",
+      "Verify page 3 results are displayed"
+    ],
+    "depends_on_indices": [51, 37]
+  },
+  {
+    "category": "style",
+    "name": "Style Search Input for Dark Theme",
+    "description": "Apply dark theme styling to search input with proper contrast",
+    "steps": [
+      "Verify search input has dark background",
+      "Verify input text is light colored",
+      "Verify placeholder text is visible but muted",
+      "Verify input border or focus ring uses accent color",
+      "Verify input is visually prominent on page"
+    ],
+    "depends_on_indices": [8, 16]
+  },
+  {
+    "category": "style",
+    "name": "Style Buttons for Dark Theme",
+    "description": "Apply consistent dark theme styling to all buttons",
+    "steps": [
+      "Verify pagination buttons have dark theme styling",
+      "Verify buttons have appropriate hover states",
+      "Verify disabled buttons are visually distinct",
+      "Verify amber/gold accent is used appropriately"
+    ],
+    "depends_on_indices": [8, 36]
+  },
+  {
+    "category": "style",
+    "name": "Apply Amber Gold Accent Throughout",
+    "description": "Ensure amber/gold accent color is used consistently for interactive elements",
+    "steps": [
+      "Verify active nav link uses amber/gold",
+      "Verify ratings use amber/gold color",
+      "Verify current page number uses amber/gold",
+      "Verify focus states use amber/gold",
+      "Verify accent usage is consistent across app"
+    ],
+    "depends_on_indices": [13, 27, 40]
+  },
+  {
+    "category": "functional",
+    "name": "Handle Network Error Gracefully",
+    "description": "Display appropriate message when network is unavailable",
+    "steps": [
+      "Disable network in browser dev tools",
+      "Attempt to search for movies",
+      "Verify user-friendly error message appears",
+      "Re-enable network",
+      "Verify search works again"
+    ],
+    "depends_on_indices": [21]
+  },
+  {
+    "category": "style",
+    "name": "Make Header Responsive for Mobile",
+    "description": "Adjust header layout for smaller mobile screens",
+    "steps": [
+      "View app on mobile width",
+      "Verify header elements do not overflow",
+      "Verify navigation is accessible on mobile",
+      "Verify logo and nav fit properly",
+      "Verify touch targets are adequately sized"
+    ],
+    "depends_on_indices": [10, 12, 15]
+  },
+  {
+    "category": "style",
+    "name": "Make Movie Cards Responsive",
+    "description": "Ensure movie cards adapt properly to different screen sizes",
+    "steps": [
+      "View movie cards on mobile width",
+      "Verify cards are readable and not cut off",
+      "Verify poster images scale appropriately",
+      "Verify text remains legible at all sizes",
+      "Verify touch targets for heart icon are adequate"
+    ],
+    "depends_on_indices": [34, 23]
+  },
+  {
+    "category": "functional",
+    "name": "Add Keyboard Navigation for Search",
+    "description": "Ensure search functionality is fully keyboard accessible",
+    "steps": [
+      "Tab to search input",
+      "Verify input receives focus with visible indicator",
+      "Type search query using keyboard",
+      "Press Enter to search",
+      "Verify results load successfully"
+    ],
+    "depends_on_indices": [17]
+  },
+  {
+    "category": "functional",
+    "name": "Add Keyboard Navigation for Favorites",
+    "description": "Ensure favorite toggle is keyboard accessible",
+    "steps": [
+      "Tab to heart icon on movie card",
+      "Verify heart receives visible focus indicator",
+      "Press Enter or Space to toggle favorite",
+      "Verify favorite state changes",
+      "Verify screen reader announcement if possible"
+    ],
+    "depends_on_indices": [28, 44]
+  },
+  {
+    "category": "functional",
+    "name": "Add ARIA Labels for Accessibility",
+    "description": "Include appropriate ARIA labels for screen readers",
+    "steps": [
+      "Verify search input has aria-label",
+      "Verify heart buttons have aria-label indicating action",
+      "Verify navigation links have proper labels",
+      "Verify images have alt text",
+      "Test with screen reader if available"
+    ],
+    "depends_on_indices": [16, 28, 12]
+  },
+  {
+    "category": "functional",
+    "name": "Direct URL Access to Favorites",
+    "description": "Ensure /favorites route works when accessed directly",
+    "steps": [
+      "Open browser to /favorites URL directly",
+      "Verify favorites page loads without errors",
+      "Verify favorites are loaded from localStorage",
+      "Verify header shows correct active state",
+      "Verify navigation works from this entry point"
+    ],
+    "depends_on_indices": [3, 47, 13]
+  }
+]

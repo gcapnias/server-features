@@ -1,4 +1,5 @@
 {
+  "chat.agent.maxRequests": 64,
   "chat.editor.fontFamily": "Consolas, 'Courier New', monospace",
   "chat.editor.fontSize": 14,
   "chat.editor.fontWeight": "default",
