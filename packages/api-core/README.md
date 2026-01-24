@@ -380,7 +380,7 @@ If using the database from multiple processes, ensure proper connection manageme
 ## Related Packages
 
 - [`@gcapnias/shared-types`](../shared-types) - Shared TypeScript type definitions
-- [`@gcapnias/mcp-server`](../../apps/mcp-server) - MCP server application using this API
+- [`@gcapnias/tasks-mcp-server`](../../apps/tasks-mcp-server) - MCP server application using this API
 
 ## License
 

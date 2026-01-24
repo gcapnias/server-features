@@ -214,7 +214,7 @@ Create `tsconfig.json` (solution-style):
   "references": [
     { "path": "./packages/shared-types" },
     { "path": "./packages/api-core" },
-    { "path": "./apps/mcp-server" }
+    { "path": "./apps/tasks-mcp-server" }
   ]
 }
 ```
@@ -567,24 +567,24 @@ export class DatabaseService {
 
 ---
 
-### 5.3 Create apps/mcp-server
+### 5.3 Create apps/tasks-mcp-server
 
 #### package.json
 
 ```bash
-mkdir -p apps/mcp-server/src
+mkdir -p apps/tasks-mcp-server/src
 ```
 
-Create `apps/mcp-server/package.json`:
+Create `apps/tasks-mcp-server/package.json`:
 
 ```json
 {
-  "name": "@gcapnias/mcp-server",
+  "name": "@gcapnias/tasks-mcp-server",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "bin": {
-    "mcp-server": "./dist/index.js"
+    "tasks-mcp-server": "./dist/index.js"
   },
   "scripts": {
     "build": "esbuild src/index.ts --bundle --platform=node --external:better-sqlite3 --banner:js=\"#!/usr/bin/env node\" --outfile=dist/index.js && node -e \"require('fs').chmodSync('dist/index.js', 0o755)\"",
@@ -624,7 +624,7 @@ esbuild src/index.ts \
 
 #### tsconfig.json
 
-Create `apps/mcp-server/tsconfig.json`:
+Create `apps/tasks-mcp-server/tsconfig.json`:
 
 ```json
 {
@@ -653,7 +653,7 @@ Create `apps/mcp-server/tsconfig.json`:
 
 #### Source Code
 
-Create `apps/mcp-server/src/index.ts` (NO shebang - esbuild adds it):
+Create `apps/tasks-mcp-server/src/index.ts` (NO shebang - esbuild adds it):
 
 ```typescript
 import { DatabaseService } from '@gcapnias/api-core';
@@ -704,7 +704,7 @@ console.log('Server completed successfully');
 
 ### 6.1 Create MCP Server README
 
-Create `apps/mcp-server/README.md`:
+Create `apps/tasks-mcp-server/README.md`:
 
 ````markdown
 # MCP Server
@@ -764,7 +764,7 @@ pnpm build
 **Expected output:**
 
 ```text
-• Packages in scope: @gcapnias/api-core, @gcapnias/mcp-server, @gcapnias/shared-types
+• Packages in scope: @gcapnias/api-core, @gcapnias/tasks-mcp-server, @gcapnias/shared-types
 • Running build in 3 packages
 @gcapnias/shared-types:build: cache miss, executing
 @gcapnias/api-core:build: cache miss, executing

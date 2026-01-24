@@ -3,6 +3,6 @@
   "references": [
     { "path": "./packages/shared-types" },
     { "path": "./packages/api-core" },
-    { "path": "./apps/mcp-server" }
+    { "path": "./apps/tasks-mcp-server" }
   ]
 }

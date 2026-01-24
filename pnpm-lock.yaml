@@ -33,7 +33,7 @@ importers:
         specifier: 4.0.18
         version: 4.0.18(@types/node@25.0.10)
 
-  apps/mcp-server:
+  apps/tasks-mcp-server:
     dependencies:
       '@gcapnias/api-core':
         specifier: workspace:*

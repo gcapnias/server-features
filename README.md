@@ -24,7 +24,7 @@ shared-types (foundation)
     ↓
 api-core (depends on shared-types, uses better-sqlite3)
     ↓
-mcp-server (depends on api-core and shared-types)
+tasks-mcp-server (depends on api-core and shared-types)
 ```
 
 ## Prerequisites
@@ -105,11 +105,11 @@ This runs Turborepo in watch mode with auto-rebuild on file changes across all w
 This monorepo handles `better-sqlite3` as a native module:
 
 1. **api-core**: Imports and uses better-sqlite3
-2. **mcp-server**: Declares as peerDependency and external in esbuild
+2. **tasks-mcp-server**: Declares as peerDependency and external in esbuild
 3. **Build**: esbuild excludes better-sqlite3 from bundle
 4. **Runtime**: Must be available in execution context
 
-See [apps/mcp-server/README.md](apps/mcp-server/README.md) for usage details.
+See [apps/tasks-mcp-server/README.md](apps/tasks-mcp-server/README.md) for usage details.
 
 ## Key Design Decisions
 

@@ -294,12 +294,12 @@ Turborepo automatically handles build order based on:
 ## 📊 Build Output
 
 ```text
-• Packages in scope: @gcapnias/api-core, @gcapnias/mcp-server, @gcapnias/shared-types
+• Packages in scope: @gcapnias/api-core, @gcapnias/tasks-mcp-server, @gcapnias/shared-types
 • Running build in 3 packages
 
 @gcapnias/shared-types:build: cache miss, executing
 @gcapnias/api-core:build: cache miss, executing
-@gcapnias/mcp-server:build: cache miss, executing
+@gcapnias/tasks-mcp-server:build: cache miss, executing
 
 Tasks:    3 successful, 3 total
 Cached:    0 cached, 3 total
