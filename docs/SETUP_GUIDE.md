@@ -436,7 +436,7 @@ Create `packages/api-core/package.json`:
   },
   "dependencies": {
     "@gcapnias/shared-types": "workspace:*",
-    "better-sqlite3": "^11.0.0"
+    "better-sqlite3": "^12.6.2"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.12"
@@ -447,7 +447,7 @@ Create `packages/api-core/package.json`:
 **Important:**
 
 - `"@gcapnias/shared-types": "workspace:*"` - Links to workspace package
-- `"better-sqlite3": "^11.0.0"` - Native module dependency
+- `"better-sqlite3": "^12.6.2"` - Native module dependency
 
 #### tsconfig.json
 
@@ -597,10 +597,10 @@ Create `apps/mcp-server/package.json`:
     "@gcapnias/shared-types": "workspace:*"
   },
   "peerDependencies": {
-    "better-sqlite3": "^11.0.0"
+    "better-sqlite3": "^12.6.2"
   },
   "devDependencies": {
-    "better-sqlite3": "^11.0.0"
+    "better-sqlite3": "^12.6.2"
   }
 }
 ```

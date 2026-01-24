@@ -86,7 +86,7 @@ This MCP server demonstrates:
 
 ### Peer Dependencies
 
-- `better-sqlite3@^11.0.0`: Native SQLite bindings (not bundled)
+- `better-sqlite3@^12.6.2`: Native SQLite bindings (not bundled)
 
 ## Troubleshooting
 

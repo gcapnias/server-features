@@ -13,13 +13,18 @@
     "build": "tsc --build",
     "dev": "tsc --build --watch",
     "clean": "tsc --build --clean",
-    "test": "vitest"
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@gcapnias/shared-types": "workspace:*",
-    "better-sqlite3": "^11.0.0"
+    "better-sqlite3": "^12.6.2",
+    "heap-js": "^2.5.0"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.12"
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^25.0.10",
+    "vitest": "^4.0.18"
   }
 }

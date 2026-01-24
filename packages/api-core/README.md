@@ -1,22 +1,29 @@
 # @gcapnias/api-core
 
-Core API functionality with SQLite database integration for the MCP server monorepo.
+Core API package providing SQLite database models, dependency resolution, and migration utilities. This package is a TypeScript implementation matching Python's `api/` module structure with exact function name preservation.
 
 ## Overview
 
-This package provides a database abstraction layer using SQLite via `better-sqlite3`. It exports the `DatabaseService` class which handles all database operations with a consistent error-handling pattern.
+This package provides three main modules migrated from Python:
+
+- **database** - Feature, Schedule, and ScheduleOverride models with SQLite integration
+- **dependency_resolver** - Topological sorting, cycle detection, and dependency management
+- **migration** - JSON to SQLite migration and export utilities
+
+All functions maintain exact Python naming conventions (snake_case) for API compatibility.
 
 ## Features
 
-- 🗃️ **SQLite Integration** - High-performance SQLite database with WAL mode enabled
-- 🔄 **Type-Safe API** - Fully typed responses using shared types from `@gcapnias/shared-types`
-- ✅ **Consistent Error Handling** - All methods return `ApiResponse<T>` with success/error states
-- 🚀 **Optimized Performance** - WAL (Write-Ahead Logging) mode for better concurrency
-- 📦 **Schema Management** - Built-in schema initialization
+- 🗃️ **SQLite Integration** - High-performance database with better-sqlite3 v12.x
+- 🔄 **Dependency Resolution** - Kahn's algorithm with priority scheduling
+- 📦 **Migration Tools** - Automatic JSON to SQLite conversion with backups
+- 🎯 **Type-Safe API** - Full TypeScript types from `@gcapnias/shared-types`
+- 📝 **Python Name Preservation** - All function names match Python exactly
+- ✅ **Comprehensive Tests** - 88 test cases covering all functionality
 
 ## Installation
 
-This is an internal workspace package. It's automatically linked when you install dependencies:
+This is an internal workspace package:
 
 ```bash
 # From monorepo root
@@ -25,172 +32,167 @@ pnpm install
 
 ## Usage
 
-### Import
+### Database Models
 
 ```typescript
-import { DatabaseService } from '@gcapnias/api-core';
-import type { DatabaseConfig } from '@gcapnias/shared-types';
+import { Feature, Schedule, create_database, get_database_path } from '@gcapnias/api-core';
+
+// Create database
+const db_path = get_database_path('./data');
+const { engine, session_maker } = create_database(db_path);
+
+// Create a feature
+const feature = new Feature({
+  id: 1,
+  priority: 10,
+  category: 'core',
+  name: 'User Authentication',
+  description: 'Implement login system',
+  steps: ['Design schema', 'Create endpoints', 'Add tests'],
+  passes: false,
+  in_progress: false,
+  dependencies: null,
+});
+
+// Convert to dictionary
+const feature_dict = feature.to_dict();
+console.log(feature_dict);
 ```
 
-### Basic Example
+### Dependency Resolution
 
 ```typescript
-// Create database instance
-const config: DatabaseConfig = {
-  path: './mydata.db',
-  verbose: false, // Set to true for SQL logging
-};
+import {
+  resolve_dependencies,
+  are_dependencies_satisfied,
+  get_blocking_dependencies,
+  would_create_circular_dependency,
+  get_ready_features,
+} from '@gcapnias/api-core';
 
-const db = new DatabaseService(config);
+// Resolve dependencies with topological sort
+const result = resolve_dependencies(features);
+console.log('Ordered:', result.ordered_features);
+console.log('Cycles:', result.circular_dependencies);
+console.log('Blocked:', result.blocked_features);
 
-// Initialize schema
-const initResult = db.initialize();
-if (!initResult.success) {
-  console.error('Failed to initialize:', initResult.error);
-  process.exit(1);
-}
+// Check if dependencies are satisfied
+const passing_ids = new Set([1, 2, 3]);
+const is_ready = are_dependencies_satisfied(feature, passing_ids);
 
-// Add an item
-const addResult = db.addItem('My Item');
-if (addResult.success) {
-  console.log('Item ID:', addResult.data?.id);
-}
+// Get features ready to work on
+const ready = get_ready_features(features, 10);
 
-// Get all items
-const itemsResult = db.getItems();
-if (itemsResult.success) {
-  console.log('Items:', itemsResult.data);
-}
-
-// Always close when done
-db.close();
+// Check for circular dependencies before adding
+const would_cycle = would_create_circular_dependency(features, source_id, target_id);
 ```
 
-### Error Handling
-
-All methods return `ApiResponse<T>`:
+### Migration Utilities
 
 ```typescript
-interface ApiResponse<T = unknown> {
-  success: boolean;
-  data?: T;
-  error?: string;
+import { migrate_json_to_sqlite, export_to_json } from '@gcapnias/api-core';
+
+// Migrate from JSON to SQLite
+const migrated = migrate_json_to_sqlite('./project');
+if (migrated) {
+  console.log('Migration complete!');
 }
-```
 
-**Example:**
-
-```typescript
-const result = db.addItem('Test');
-
-if (result.success) {
-  // Success case - data is available
-  const itemId = result.data.id;
-  console.log(`Created item with ID: ${itemId}`);
-} else {
-  // Error case - error message is available
-  console.error(`Failed to add item: ${result.error}`);
-}
+// Export back to JSON
+const json_path = export_to_json('./project');
+console.log(`Exported to: ${json_path}`);
 ```
 
 ## API Reference
 
-### `DatabaseService`
+### Database Module (`database.ts`)
 
-#### Constructor
+#### Classes
 
-```typescript
-constructor(config: DatabaseConfig)
-```
+**`Feature`** - Test case/feature model
 
-**Parameters:**
-- `config.path` - Path to SQLite database file (will be created if doesn't exist)
-- `config.verbose` - Optional. Set to `true` to log all SQL statements
+- `to_dict(): object` - Convert to JSON-serializable dictionary
+- `get_dependencies_safe(): number[]` - Safely extract dependencies
 
-**Example:**
-```typescript
-const db = new DatabaseService({
-  path: './data.db',
-  verbose: process.env.NODE_ENV === 'development',
-});
-```
+**`Schedule`** - Time-based schedule for automated runs
 
-#### Methods
+- `to_dict(): object` - Convert to dictionary
+- `is_active_on_day(weekday: number): boolean` - Check if active on given day
 
-##### `initialize(): ApiResponse`
+**`ScheduleOverride`** - Manual schedule override
 
-Initializes the database schema. Creates the `items` table if it doesn't exist.
+- `to_dict(): object` - Convert to dictionary
 
-**Returns:** `ApiResponse` with success status
+**`Session`** - Database session wrapper
 
-**Schema:**
-```sql
-CREATE TABLE IF NOT EXISTS items (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  created_at INTEGER DEFAULT (strftime('%s', 'now'))
-)
-```
+- `query<T>(sql, ...params): T[]` - Execute query
+- `execute(sql, ...params): RunResult` - Execute statement
+- `beginTransaction()`, `commit()`, `rollback()` - Transaction control
 
-**Example:**
-```typescript
-const result = db.initialize();
-if (!result.success) {
-  throw new Error(result.error);
-}
-```
+#### Functions
 
----
+Python function names are preserved exactly:
 
-##### `getItems(): ApiResponse<Item[]>`
+- `get_database_path(project_dir?: string): string`
+- `get_database_url(project_dir?: string): string`
+- `create_database(db_path?: string): { engine, session_maker }`
+- `set_session_maker(session_maker: () => Session): void`
+- `get_db(): Generator<Session>` - Session provider with cleanup
+- `_is_network_path(filepath: string): boolean` - Detect network filesystems
 
-Retrieves all items from the database, ordered by creation date (newest first).
+### Dependency Resolver Module (`dependency_resolver.ts`)
 
-**Returns:** `ApiResponse<Item[]>` where `Item` is:
-```typescript
-{
-  id: number;
-  name: string;
-  created_at: number; // Unix timestamp
-}
-```
+All functions preserve Python naming:
 
-**Example:**
-```typescript
-const result = db.getItems();
-if (result.success && result.data) {
-  result.data.forEach((item) => {
-    console.log(`${item.id}: ${item.name}`);
-  });
-}
-```
+- `resolve_dependencies(features: Feature[]): DependencyResult`
+  - Topological sort using Kahn's algorithm with priority-aware ordering
+  - Returns ordered features, cycles, blocked features, and missing dependencies
 
----
+- `are_dependencies_satisfied(feature: Feature, passing_ids: Set<number>): boolean`
+  - Check if all dependencies have passes=true
 
-##### `addItem(name: string): ApiResponse<{ id: number }>`
+- `get_blocking_dependencies(feature: Feature, passing_ids: Set<number>): number[]`
+  - Get list of incomplete dependency IDs
 
-Adds a new item to the database.
+- `would_create_circular_dependency(features: Feature[], source_id: number, target_id: number): boolean`
+  - Check if adding edge would create cycle using DFS
 
-**Parameters:**
-- `name` - Name of the item (required)
+- `validate_dependencies(feature_id: number, dependency_ids: number[], all_feature_ids: Set<number>): [boolean, string]`
+  - Validate dependency list (max limit, self-reference, existence, duplicates)
 
-**Returns:** `ApiResponse<{ id: number }>` with the ID of the created item
+- `_detect_cycles(features: Feature[]): number[][]`
+  - Find all dependency cycles using DFS (internal helper)
 
-**Example:**
-```typescript
-const result = db.addItem('My New Item');
-if (result.success) {
-  console.log(`Created item with ID: ${result.data?.id}`);
-}
-```
+- `compute_scheduling_scores(features: Feature[]): Map<number, number>`
+  - Calculate priority scores for scheduling
 
----
+- `get_ready_features(features: Feature[], limit?: number): Feature[]`
+  - Get features ready to work on (not passing, not in progress, dependencies satisfied)
 
-##### `close(): void`
+- `get_blocked_features(features: Feature[]): Array<Feature & { blocked_by: number[] }>`
+  - Get blocked features with blocking dependency info
 
-Closes the database connection. Always call this when you're done using the database.
+- `build_graph_data(features: Feature[]): { nodes, edges }`
+  - Build dependency graph visualization data
+
+### Migration Module (`migration.ts`)
+
+Python function names preserved:
+
+- `migrate_json_to_sqlite(project_dir?: string, session_maker?: () => Session): boolean`
+  - Import feature_list.json to SQLite database
+  - Skips if database already has data
+  - Creates timestamped backup of JSON file
+  - Returns true if migration performed
+
+- `export_to_json(project_dir?: string, session_maker?: () => Session, output_path?: string): string`
+  - Export database to JSON file
+  - Default output: feature_list_export.json
+  - Sorts by priority, then id
+  - Returns path to exported file
 
 **Example:**
+
 ```typescript
 try {
   // Use database...
@@ -205,7 +207,7 @@ try {
 
 ```typescript
 interface DatabaseConfig {
-  path: string;      // Path to SQLite database file
+  path: string; // Path to SQLite database file
   verbose?: boolean; // Enable SQL statement logging
 }
 ```
@@ -213,6 +215,7 @@ interface DatabaseConfig {
 ### SQLite Settings
 
 The `DatabaseService` automatically configures:
+
 - **WAL Mode** - Write-Ahead Logging for better concurrency
 - **Auto-increment IDs** - Primary keys use SQLite's AUTOINCREMENT
 - **Unix Timestamps** - Automatic timestamp generation using SQLite's `strftime`
@@ -221,16 +224,20 @@ The `DatabaseService` automatically configures:
 
 ### Production Dependencies
 
-- **`better-sqlite3`** (^11.0.0) - Fast, synchronous SQLite3 bindings
+- **`better-sqlite3`** (^12.6.2) - Fast, synchronous SQLite3 bindings
   - ⚠️ **Native module** - Requires compilation for your platform
   - Must match Node.js version
   - See [better-sqlite3 docs](https://github.com/WiseLibs/better-sqlite3) for details
+
+- **`heap-js`** (^2.7.1) - Priority queue for scheduling algorithms
 
 - **`@gcapnias/shared-types`** (workspace) - Shared TypeScript type definitions
 
 ### Development Dependencies
 
 - **`@types/better-sqlite3`** - TypeScript definitions for better-sqlite3
+- **`@types/node`** - Node.js TypeScript definitions
+- **`vitest`** - Fast unit test framework
 
 ## Development
 
@@ -250,100 +257,110 @@ pnpm clean
 ### Testing
 
 ```bash
+# Run all tests
 pnpm test
+
+# Watch mode
+pnpm test:watch
+
+# Coverage report
+pnpm test:coverage
 ```
+
+**Test Coverage:** 88 tests across 3 test suites (database, dependency_resolver, migration)
 
 ## Type Exports
 
-This package re-exports types from `@gcapnias/shared-types`:
+This package re-exports all types from `@gcapnias/shared-types`:
 
 ```typescript
-import type { 
-  DatabaseConfig, 
-  ApiResponse,
-  ServerConfig 
+import type {
+  Feature,
+  Schedule,
+  ScheduleOverride,
+  DependencyResult,
+  MAX_DEPENDENCIES,
+  MAX_DEPENDENCY_DEPTH,
 } from '@gcapnias/api-core';
 ```
+
+## Python API Compatibility
+
+All functions maintain exact Python naming for cross-language compatibility:
+
+| Python Module          | Python Function                      | TypeScript Module      | Match |
+| ---------------------- | ------------------------------------ | ---------------------- | ----- |
+| database.py            | `get_database_path()`                | database.ts            | ✅    |
+| database.py            | `create_database()`                  | database.ts            | ✅    |
+| database.py            | `get_db()`                           | database.ts            | ✅    |
+| dependency_resolver.py | `resolve_dependencies()`             | dependency_resolver.ts | ✅    |
+| dependency_resolver.py | `are_dependencies_satisfied()`       | dependency_resolver.ts | ✅    |
+| dependency_resolver.py | `get_blocking_dependencies()`        | dependency_resolver.ts | ✅    |
+| dependency_resolver.py | `would_create_circular_dependency()` | dependency_resolver.ts | ✅    |
+| dependency_resolver.py | `validate_dependencies()`            | dependency_resolver.ts | ✅    |
+| dependency_resolver.py | `_detect_cycles()`                   | dependency_resolver.ts | ✅    |
+| dependency_resolver.py | `compute_scheduling_scores()`        | dependency_resolver.ts | ✅    |
+| dependency_resolver.py | `get_ready_features()`               | dependency_resolver.ts | ✅    |
+| dependency_resolver.py | `get_blocked_features()`             | dependency_resolver.ts | ✅    |
+| dependency_resolver.py | `build_graph_data()`                 | dependency_resolver.ts | ✅    |
+| migration.py           | `migrate_json_to_sqlite()`           | migration.ts           | ✅    |
+| migration.py           | `export_to_json()`                   | migration.ts           | ✅    |
+
+**Total: 22 Python functions migrated with exact name preservation**
 
 ## Performance Considerations
 
 ### WAL Mode
 
-The database uses WAL (Write-Ahead Logging) mode which:
+The database automatically uses WAL (Write-Ahead Logging) on local filesystems:
+
 - ✅ Allows concurrent reads during writes
 - ✅ Faster than traditional rollback journal
 - ✅ Better crash recovery
 - ⚠️ Creates additional files (`.db-wal`, `.db-shm`)
 
-### Prepared Statements
+Network filesystems automatically use DELETE mode for safety.
 
-All queries use prepared statements for:
-- Better performance on repeated queries
-- Protection against SQL injection
-- Type safety
+### Dependency Resolution
 
-## Error Handling Best Practices
+- **Kahn's Algorithm** - O(V + E) topological sort
+- **Priority Queue** - Min-heap for priority-aware ordering (heap-js)
+- **Cycle Detection** - DFS with depth limit (MAX_DEPENDENCY_DEPTH=50)
+- **Security** - Max 20 dependencies per feature (MAX_DEPENDENCIES)
 
-**Always check the `success` field:**
+## Architecture
 
-```typescript
-const result = db.addItem('Test');
-if (!result.success) {
-  // Handle error
-  logger.error('Database error:', result.error);
-  return;
-}
+### File Structure
 
-// Safe to use result.data
-console.log(result.data.id);
+```text
+packages/api-core/src/
+├── database.ts                      # Python: database.py
+├── dependency_resolver.ts           # Python: dependency_resolver.py
+├── migration.ts                     # Python: migration.py
+├── database-utils.ts                # TypeScript-only utilities
+├── dependency_resolver-utils.ts     # TypeScript-only utilities
+├── migration-utils.ts               # TypeScript-only utilities
+├── index.ts                         # Main exports
+└── __tests__/
+    ├── database.test.ts
+    ├── dependency_resolver.test.ts
+    └── migration.test.ts
 ```
 
-**Use early returns:**
+### Design Principles
 
-```typescript
-function createItem(name: string) {
-  const result = db.addItem(name);
-  if (!result.success) {
-    throw new Error(`Failed to create item: ${result.error}`);
-  }
-  return result.data.id;
-}
-```
-
-## Extending the Schema
-
-To add new tables or modify the schema:
-
-1. Update the `initialize()` method in `src/index.ts`
-2. Add corresponding methods for CRUD operations
-3. Define return types in `@gcapnias/shared-types`
-4. Update this README with new API documentation
-
-**Example:**
-
-```typescript
-initialize(): ApiResponse {
-  try {
-    this.db.exec(`
-      CREATE TABLE IF NOT EXISTS items (...);
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT UNIQUE NOT NULL,
-        created_at INTEGER DEFAULT (strftime('%s', 'now'))
-      );
-    `);
-    return { success: true };
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
-}
-```
+1. **Python Name Preservation** - All exported functions use Python's snake_case naming
+2. **Utility Separation** - TypeScript-specific helpers in `-utils.ts` files
+3. **No API Wrapper** - Direct function exports, not wrapped in classes
+4. **Type Safety** - Full TypeScript with JSDoc referencing Python signatures
+5. **Test Parity** - Test structure mirrors Python tests
 
 ## Troubleshooting
 
 ### "Cannot find module 'better-sqlite3'"
 
 Ensure dependencies are installed:
+
 ```bash
 pnpm install
 ```
@@ -351,6 +368,7 @@ pnpm install
 ### "Module did not self-register"
 
 Node.js version mismatch. Reinstall native modules:
+
 ```bash
 pnpm install --force
 ```

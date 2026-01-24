@@ -697,7 +697,7 @@ function ensure_directory_exists(path: string): void {
 }
 ```
 
-**[packages/api-core/src/**tests**/database.test.ts](packages/api-core/src/__tests__/database.test.ts)**:
+**[packages/api-core/src/**tests**/database.test.ts](packages/api-core/src/**tests**/database.test.ts)**:
 
 ```typescript
 import Database from 'better-sqlite3';
@@ -755,7 +755,7 @@ describe('database', () => {
 });
 ```
 
-**[packages/api-core/src/**tests**/dependency_resolver.test.ts](packages/api-core/src/__tests__/dependency_resolver.test.ts)**:
+**[packages/api-core/src/**tests**/dependency_resolver.test.ts](packages/api-core/src/**tests**/dependency_resolver.test.ts)**:
 
 ```typescript
 import {
@@ -825,7 +825,7 @@ describe('dependency_resolver', () => {
 });
 ```
 
-**[packages/api-core/src/**tests**/migration.test.ts](packages/api-core/src/__tests__/migration.test.ts)**:
+**[packages/api-core/src/**tests**/migration.test.ts](packages/api-core/src/**tests**/migration.test.ts)**:
 
 ```typescript
 import { migrate_json_to_sqlite, export_to_json } from '../migration';
