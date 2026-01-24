@@ -7,6 +7,7 @@
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import Database from 'better-sqlite3';
+import * as path from 'path';
 import {
   create_database,
   get_database_path,
@@ -34,8 +35,9 @@ describe('database', () => {
     });
 
     it('should use custom directory when provided', () => {
-      const path = get_database_path('/custom/dir');
-      expect(path).toBe('/custom/dir/features.db');
+      const dbPath = get_database_path('/custom/dir');
+      const expectedPath = path.join('/custom/dir', 'features.db');
+      expect(dbPath).toBe(expectedPath);
     });
   });
 

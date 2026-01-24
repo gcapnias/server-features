@@ -12,19 +12,29 @@ import { migrate_json_to_sqlite, export_to_json } from '../migration';
 import { create_database, Feature } from '../database';
 
 describe('migration', () => {
-  const test_dir = path.join(process.cwd(), 'test-temp');
+  const base_temp_dir = path.join(process.cwd(), 'test-temp');
+  let test_dir: string;
 
   beforeEach(() => {
-    // Create test directory
+    // Create unique subdirectory inside test-temp for each test to avoid conflicts
+    test_dir = path.join(
+      base_temp_dir,
+      `test-${Date.now()}-${Math.random().toString(36).slice(2)}`
+    );
     if (!fs.existsSync(test_dir)) {
       fs.mkdirSync(test_dir, { recursive: true });
     }
   });
 
   afterEach(() => {
-    // Clean up test directory
+    // Clean up test directory with retry for Windows file locks
     if (fs.existsSync(test_dir)) {
-      fs.rmSync(test_dir, { recursive: true, force: true });
+      try {
+        fs.rmSync(test_dir, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
+      } catch (err) {
+        // Ignore cleanup errors - temp directories will be cleaned eventually
+        console.warn(`Failed to clean up ${test_dir}:`, err);
+      }
     }
   });
 
@@ -209,7 +219,10 @@ describe('migration', () => {
       expect(exported[1].id).toBe(2);
       expect(exported[2].id).toBe(3);
 
+      // Close database and allow it to flush
       engine.close();
+      // Small delay to ensure Windows releases the file lock
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 10);
     });
 
     it('should return output file path', () => {
@@ -220,7 +233,10 @@ describe('migration', () => {
 
       expect(output_path).toContain('feature_list_export.json');
 
+      // Close database and allow it to flush
       engine.close();
+      // Small delay to ensure Windows releases the file lock
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 10);
     });
   });
 });
