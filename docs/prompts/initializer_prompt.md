@@ -5,9 +5,7 @@ Your job is to set up the foundation for all future coding agents.
 
 ## FIRST: Read the Project Specification
 
-Start by reading `app_spec.txt` in your working directory. This file contains
-the complete specification for what you need to build. Read it carefully
-before proceeding.
+Start by reading `app_spec.txt` in your working directory. This file contains the complete specification for what you need to build. Read it carefully before proceeding.
 
 ---
 
@@ -21,13 +19,11 @@ This number was determined during spec creation and must be followed precisely. 
 
 ### CRITICAL FIRST TASK: Create Features
 
-Based on `app_spec.txt`, create features using the feature_create_bulk tool. The features are stored in a SQLite database,
-which is the single source of truth for what needs to be built.
+Based on `app_spec.txt`, create features using the feature_create_bulk tool. The features are stored in a SQLite database, which is the single source of truth for what needs to be built.
 
 **Creating Features:**
 
-Use the feature_create_bulk tool to add all features at once. Note: You MUST include `depends_on_indices`
-to specify dependencies. Features with no dependencies can run first and enable parallel execution.
+Use the feature_create_bulk tool to add all features at once. Note: You MUST include `depends_on_indices` to specify dependencies. Features with no dependencies can run first and enable parallel execution.
 
 ```json
 Use the feature_create_bulk tool with features=[
@@ -201,8 +197,7 @@ This ensures:
 
 ### Example: Todo App Feature Chain (Wide Graph Pattern)
 
-This example shows the CORRECT wide graph pattern where multiple features share the same dependency,
-enabling parallel execution:
+This example shows the CORRECT wide graph pattern where multiple features share the same dependency, enabling parallel execution:
 
 ```json
 [
@@ -627,10 +622,11 @@ The feature_list.json must include tests that **actively verify real data** and 
 ---
 
 **CRITICAL INSTRUCTION:**
-IT IS CATASTROPHIC TO REMOVE OR EDIT FEATURES IN FUTURE SESSIONS.
-Features can ONLY be marked as passing (via the `feature_mark_passing` tool with the feature_id).
-Never remove features, never edit descriptions, never modify testing steps.
-This ensures no functionality is missed.
+
+- IT IS CATASTROPHIC TO REMOVE OR EDIT FEATURES IN FUTURE SESSIONS.
+- Features can ONLY be marked as passing (via the `feature_mark_passing` tool with the feature_id).
+- Never remove features, never edit descriptions, never modify testing steps.
+- This ensures no functionality is missed.
 
 ### SECOND TASK: Create init.sh
 
@@ -657,9 +653,7 @@ Commit message: "Initial setup: init.sh, project structure, and features created
 
 ### FOURTH TASK: Create Project Structure
 
-Set up the basic project structure based on what's specified in `app_spec.txt`.
-This typically includes directories for frontend, backend, and any other
-components mentioned in the spec.
+Set up the basic project structure based on what's specified in `app_spec.txt`. This typically includes directories for frontend, backend, and any other components mentioned in the spec.
 
 ### ENDING THIS SESSION
 
@@ -670,7 +664,4 @@ Once you have completed the four tasks above:
 3. Leave the environment in a clean, working state
 4. Exit cleanly
 
-**IMPORTANT:** Do NOT attempt to implement any features. Your job is setup only.
-Feature implementation will be handled by parallel coding agents that spawn after
-you complete initialization. Starting implementation here would create a bottleneck
-and defeat the purpose of the parallel architecture.
+**IMPORTANT:** Do NOT attempt to implement any features. Your job is setup only. Feature implementation will be handled by parallel coding agents that spawn after you complete initialization. Starting implementation here would create a bottleneck and defeat the purpose of the parallel architecture.
