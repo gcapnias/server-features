@@ -30,7 +30,7 @@ tasks-mcp-server (depends on api-core and shared-types)
 ## Prerequisites
 
 - **Node.js**: >=20.0.0
-- **pnpm**: >=9.0.0
+- **pnpm**: >=10.0.0
 
 ## Getting Started
 
@@ -191,7 +191,7 @@ Same as above, but place in `apps/` directory.
 Install pnpm globally:
 
 ```bash
-npm install -g pnpm@9.0.0
+npm install -g pnpm@10.0.0
 ```
 
 Or enable Corepack (requires admin/sudo):

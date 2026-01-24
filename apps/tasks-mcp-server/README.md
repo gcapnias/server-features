@@ -29,7 +29,7 @@ This MCP server exposes feature management capabilities through standardized MCP
 ## Prerequisites
 
 - **Node.js**: >=20.0.0 (required for native module compatibility)
-- **pnpm**: >=9.0.0
+- **pnpm**: >=10.0.0
 
 ## Installation
 

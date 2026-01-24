@@ -22,14 +22,14 @@ A comprehensive step-by-step guide for initializing a production-ready Node.js m
 Before starting, ensure you have:
 
 - **Node.js** >=20.0.0 ([download](https://nodejs.org/))
-- **pnpm** >=9.0.0 (install with `npm install -g pnpm@9.0.0`)
+- **pnpm** >=10.0.0 (install with `npm install -g pnpm@10.0.0`)
 - **Git** installed and configured
 
 Verify your setup:
 
 ```bash
 node --version  # Should be >= 20.0.0
-pnpm --version  # Should be >= 9.0.0
+pnpm --version  # Should be >= 10.0.0
 ```
 
 ---
@@ -143,10 +143,10 @@ Create `package.json`:
   "name": "mcp-server-monorepo",
   "version": "0.0.0",
   "private": true,
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@10.0.0",
   "engines": {
     "node": ">=20.0.0",
-    "pnpm": ">=9.0.0"
+    "pnpm": ">=10.0.0"
   },
   "scripts": {
     "build": "turbo run build",
@@ -714,7 +714,7 @@ A Model Context Protocol (MCP) server built with TypeScript and SQLite.
 ## Prerequisites
 
 - **Node.js**: >=20.0.0 (required for native module compatibility)
-- **pnpm**: >=9.0.0
+- **pnpm**: >=10.0.0
 
 ## Running
 
@@ -889,7 +889,7 @@ Native modules require special handling:
 Install pnpm globally:
 
 ```bash
-npm install -g pnpm@9.0.0
+npm install -g pnpm@10.0.0
 ```
 
 ### "Running this command will add the dependency to the workspace root"
