@@ -226,7 +226,7 @@ describe('Feature Management Tools', () => {
 
 **Test results:**
 
-```
+```text
 ✓ src/__tests__/tools.test.ts (34) 3808ms
   ✓ Feature Management Tools (34) 3807ms
 
@@ -271,7 +271,7 @@ Test Files  1 passed (1)
 
 **Build output:**
 
-```
+```text
 @gcapnias/shared-types:build: cache hit, replaying logs
 @gcapnias/api-core:build: cache hit, replaying logs
 @gcapnias/tasks-mcp-server:build: cache hit, replaying logs
@@ -369,7 +369,7 @@ const ready = await client.callTool('feature_get_ready', { limit: 5 });
 8. `apps/tasks-mcp-server/tsconfig.json` - 12 lines
 9. `apps/tasks-mcp-server/README.md` - 161 lines
 
-**Total lines of code: 2574 lines**
+**Total lines of code:** 2574 lines
 
 ### Modified Files
 
@@ -429,4 +429,4 @@ The TypeScript implementation maintains **functional equivalence** with the Pyth
 - Better integration with TypeScript tooling
 - Cross-process locking mechanism
 
-**Migration Status: COMPLETE ✅**
+**Migration Status: COMPLETE** ✅

@@ -141,7 +141,7 @@ Successfully migrated **~850 lines** of Python code from `api/` to TypeScript in
 | migration.py           | `migrate_json_to_sqlite()`         | migration.ts           | ✅     |
 | migration.py           | `export_to_json()`                 | migration.ts           | ✅     |
 
-**Total: 22 Python functions migrated with exact name preservation**
+**Total:** 22 Python functions migrated with exact name preservation
 
 ## Dependencies Added
 
