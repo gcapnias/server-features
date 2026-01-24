@@ -29,7 +29,13 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
+import express from 'express';
+import { createServer } from 'node:https';
+import { readFileSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
 import * as path from 'node:path';
 import {
   initializeDatabase,
@@ -381,11 +387,210 @@ server.registerTool(
 );
 
 /**
+ * Parse command line arguments
+ */
+function parseArgs() {
+  const args = process.argv.slice(2);
+  let mode: 'stdio' | 'http' | 'https' = 'stdio';
+  let port = 8080;
+  let certPath: string | undefined;
+  let keyPath: string | undefined;
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg === '--http') {
+      mode = 'http';
+    } else if (arg === '--https') {
+      mode = 'https';
+    } else if (arg === '--port' && i + 1 < args.length) {
+      port = parseInt(args[i + 1], 10);
+      i++;
+    } else if (arg === '--cert' && i + 1 < args.length) {
+      certPath = args[i + 1];
+      i++;
+    } else if (arg === '--key' && i + 1 < args.length) {
+      keyPath = args[i + 1];
+      i++;
+    }
+  }
+
+  return { mode, port, certPath, keyPath };
+}
+
+/**
+ * Start the MCP server in stdio mode
+ */
+async function startStdioServer() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error('MCP server running on stdio');
+}
+
+/**
+ * Start the MCP server in HTTP mode
+ */
+async function startHttpServer(port: number) {
+  const app = express();
+  app.use(express.json());
+
+  const transports: Record<string, StreamableHTTPServerTransport> = {};
+
+  app.post('/mcp', async (req, res) => {
+    const sessionId = req.headers['mcp-session-id'] as string | undefined;
+    let transport: StreamableHTTPServerTransport;
+
+    if (sessionId && transports[sessionId]) {
+      // Reuse existing session
+      transport = transports[sessionId];
+    } else if (!sessionId && isInitializeRequest(req.body)) {
+      // New session initialization
+      transport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: () => randomUUID(),
+        onsessioninitialized: (id) => {
+          transports[id] = transport;
+          console.error('Session initialized:', id);
+        },
+        onsessionclosed: (id) => {
+          delete transports[id];
+          console.error('Session closed:', id);
+        },
+      });
+
+      transport.onclose = () => {
+        if (transport.sessionId) {
+          delete transports[transport.sessionId];
+        }
+      };
+
+      await server.connect(transport);
+    } else {
+      res.status(400).json({
+        jsonrpc: '2.0',
+        error: { code: -32000, message: 'Invalid session' },
+        id: null,
+      });
+      return;
+    }
+
+    await transport.handleRequest(req, res, req.body);
+  });
+
+  app.get('/mcp', async (req, res) => {
+    const sessionId = req.headers['mcp-session-id'] as string;
+    const transport = transports[sessionId];
+    if (transport) {
+      await transport.handleRequest(req, res);
+    } else {
+      res.status(400).send('Invalid session');
+    }
+  });
+
+  app.delete('/mcp', async (req, res) => {
+    const sessionId = req.headers['mcp-session-id'] as string;
+    const transport = transports[sessionId];
+    if (transport) {
+      await transport.handleRequest(req, res);
+    } else {
+      res.status(400).send('Invalid session');
+    }
+  });
+
+  app.listen(port, () => {
+    console.error(`MCP server running on http://localhost:${port}/mcp`);
+  });
+}
+
+/**
+ * Start the MCP server in HTTPS mode
+ */
+async function startHttpsServer(port: number, certPath?: string, keyPath?: string) {
+  if (!certPath || !keyPath) {
+    throw new Error('HTTPS mode requires --cert and --key arguments');
+  }
+
+  const app = express();
+  app.use(express.json());
+
+  const transports: Record<string, StreamableHTTPServerTransport> = {};
+
+  app.post('/mcp', async (req, res) => {
+    const sessionId = req.headers['mcp-session-id'] as string | undefined;
+    let transport: StreamableHTTPServerTransport;
+
+    if (sessionId && transports[sessionId]) {
+      // Reuse existing session
+      transport = transports[sessionId];
+    } else if (!sessionId && isInitializeRequest(req.body)) {
+      // New session initialization
+      transport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: () => randomUUID(),
+        onsessioninitialized: (id) => {
+          transports[id] = transport;
+          console.error('Session initialized:', id);
+        },
+        onsessionclosed: (id) => {
+          delete transports[id];
+          console.error('Session closed:', id);
+        },
+      });
+
+      transport.onclose = () => {
+        if (transport.sessionId) {
+          delete transports[transport.sessionId];
+        }
+      };
+
+      await server.connect(transport);
+    } else {
+      res.status(400).json({
+        jsonrpc: '2.0',
+        error: { code: -32000, message: 'Invalid session' },
+        id: null,
+      });
+      return;
+    }
+
+    await transport.handleRequest(req, res, req.body);
+  });
+
+  app.get('/mcp', async (req, res) => {
+    const sessionId = req.headers['mcp-session-id'] as string;
+    const transport = transports[sessionId];
+    if (transport) {
+      await transport.handleRequest(req, res);
+    } else {
+      res.status(400).send('Invalid session');
+    }
+  });
+
+  app.delete('/mcp', async (req, res) => {
+    const sessionId = req.headers['mcp-session-id'] as string;
+    const transport = transports[sessionId];
+    if (transport) {
+      await transport.handleRequest(req, res);
+    } else {
+      res.status(400).send('Invalid session');
+    }
+  });
+
+  const httpsServer = createServer(
+    {
+      cert: readFileSync(certPath),
+      key: readFileSync(keyPath),
+    },
+    app
+  );
+
+  httpsServer.listen(port, () => {
+    console.error(`MCP server running on https://localhost:${port}/mcp`);
+  });
+}
+
+/**
  * Start the MCP server
  */
 async function main() {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
+  const { mode, port, certPath, keyPath } = parseArgs();
 
   // Handle cleanup on exit
   process.on('SIGINT', () => {
@@ -397,6 +602,14 @@ async function main() {
     closeDatabase();
     process.exit(0);
   });
+
+  if (mode === 'http') {
+    await startHttpServer(port);
+  } else if (mode === 'https') {
+    await startHttpsServer(port, certPath, keyPath);
+  } else {
+    await startStdioServer();
+  }
 }
 
 main().catch((error) => {
