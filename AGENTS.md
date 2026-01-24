@@ -67,3 +67,32 @@ autocoder-playground/
 
 - **[apps/tasks-mcp-server/README.md](apps/tasks-mcp-server/README.md)** - MCP server application documentation covering prerequisites, running instructions, and native module compatibility
 - **[packages/api-core/README.md](packages/api-core/README.md)** - Core API package documentation with DatabaseService API reference, usage examples, and best practices
+
+---
+
+## Development Workflow
+
+### 🛠 Dependency & Environment Management
+
+- **Rule**: DO NOT modify `package.json` or lockfiles directly.
+- **Detection**: Before running any command, identify the correct package manager by checking for these lockfiles in the root:
+  - `pnpm-lock.yaml` -> Use **pnpm**
+  - `yarn.lock` -> Use **yarn**
+  - `package-lock.json` -> Use **npm**
+- **Constraint**: Always use the detected tool's CLI to manage dependencies to ensure lockfiles remain synchronized.
+
+### 🏗 Build & Verification Commands
+
+Use the detected package manager to run these standard scripts:
+
+- **Build**: `[pm] run build`
+- **Type Check**: `[pm] run typecheck`
+- **Lint**: `[pm] run lint`
+- **Test**: `[pm] test` (or `[pm] run test`)
+
+### 🧪 Targeted Testing
+
+When possible, run specific tests instead of the full suite for speed:
+
+- **npm/pnpm**: `[pm] test -- -t "pattern"`
+- **yarn**: `yarn test -t "pattern"`

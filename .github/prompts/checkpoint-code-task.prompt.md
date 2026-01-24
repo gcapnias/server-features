@@ -9,8 +9,8 @@ Please create a comprehensive checkpoint commit with the following steps:
 
 2. **Prepare the codebase**:
    - Ensure all code changes are saved, and all editor windows are closed
-   - Run `pnpm lint` and fix any linting errors if applicable
-   - Run `pnpm format` to format code if applicable
+   - Run `pnpm lint` and fix any linting errors
+   - Run `pnpm format` to format code
 
 3. **Analyze all changes**:
    - Run `git status` to see all tracked and untracked files

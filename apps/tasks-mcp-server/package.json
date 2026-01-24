@@ -10,16 +10,24 @@
     "build": "esbuild src/index.ts --bundle --platform=node --external:better-sqlite3 --banner:js=\"#!/usr/bin/env node\" --outfile=dist/index.js && node -e \"require('fs').chmodSync('dist/index.js', 0o755)\"",
     "dev": "pnpm build --watch",
     "start": "node dist/index.js",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@gcapnias/api-core": "workspace:*",
-    "@gcapnias/shared-types": "workspace:*"
+    "@gcapnias/shared-types": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^3.24.1"
   },
   "peerDependencies": {
     "better-sqlite3": "^12.6.2"
   },
   "devDependencies": {
-    "better-sqlite3": "^12.6.2"
+    "better-sqlite3": "^12.6.2",
+    "@types/node": "^22.10.5",
+    "esbuild": "^0.24.2",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
   }
 }
