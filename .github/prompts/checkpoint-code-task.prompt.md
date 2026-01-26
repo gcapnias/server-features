@@ -5,7 +5,7 @@ description: Create commit with detailed comment
 
 Please create a comprehensive checkpoint commit with the following steps:
 
-1. **Initialize Git if needed**: Run `git init` if git has not been instantiated for the project yet.
+1. **Initialize Git if needed**: Check with `git rev-parse --is-inside-work-tree` if a git repository is already initialized. Else run `git init` to initialize a new repository.
 
 2. **Prepare the codebase**:
    - Ensure all code changes are saved, and all editor windows are closed
@@ -33,7 +33,7 @@ Please create a comprehensive checkpoint commit with the following steps:
      - Breaking changes or migration notes if applicable
    - **Footer**: Include co-author attribution as shown in the Git Safety Protocol
 
-6. **Execute the commit**: Create the commit with the properly formatted message following this repository's conventions.
+6. **Execute the commit**: Create the commit with the properly formatted message following this repository's conventions. When generating git commit commands, do not include literal `\n` strings inside the `-m` flag. Instead, use multiple `-m` flags for each paragraph (e.g., git commit -m "Title" -m "Body") to ensure the terminal renders newlines correctly.
 
 IMPORTANT:
 

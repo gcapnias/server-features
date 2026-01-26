@@ -7,6 +7,8 @@ tools:
   - query-docs
 ---
 
+# Documentation Lookup Skill
+
 When the user asks about libraries, frameworks, or needs code examples, use Context7 MCP to fetch current documentation instead of relying on training data.
 
 ## When to Use This Skill

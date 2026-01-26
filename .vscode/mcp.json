@@ -8,8 +8,8 @@
         "@adenot/mcp-google-search"
       ],
       "env": {
-        "GOOGLE_API_KEY": "AIzaSyDsj7o8sd6YXq5nJjzpFhPb8JIEO-HJyFU",
-        "GOOGLE_SEARCH_ENGINE_ID": "223565732b8b04e64"
+        "GOOGLE_API_KEY": "${input:GOOGLE_API_KEY}",
+        "GOOGLE_SEARCH_ENGINE_ID": "${input:GOOGLE_SEARCH_ENGINE_ID}"
       }
     },
     "io.github.upstash/context7": {
@@ -40,6 +40,18 @@
       "id": "CONTEXT7_API_KEY",
       "type": "promptString",
       "description": "API key for authentication",
+      "password": true
+    },
+    {
+      "id": "GOOGLE_API_KEY",
+      "type": "promptString",
+      "description": "Google API key, for authentication",
+      "password": true
+    },
+    {
+      "id": "GOOGLE_SEARCH_ENGINE_ID",
+      "type": "promptString",
+      "description": "Google Search Engine ID, for authentication",
       "password": true
     }
   ]

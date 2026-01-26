@@ -43,3 +43,7 @@ lerna-debug.log*
 
 # Native modules
 *.node
+
+# Features MCP Server DB
+**\features.db
+**\features.db-*
