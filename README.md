@@ -11,10 +11,11 @@ This monorepo demonstrates best practices for building MCP servers with proper d
 ```text
 .
 ├── packages/
-│   ├── shared-types/     # Shared TypeScript type definitions
-│   └── api-core/         # Core API with SQLite integration
+│   ├── shared-types/      # Shared TypeScript type definitions
+│   └── api-core/          # Core API with SQLite integration
 └── apps/
-    └── mcp-server/       # MCP server application (bundled with esbuild)
+    ├── tasks-mcp-server/  # MCP server application (bundled with esbuild)
+    └── feature-explorer/  # Terminal UI for exploring features
 ```
 
 ### Dependency Graph
@@ -22,9 +23,10 @@ This monorepo demonstrates best practices for building MCP servers with proper d
 ```text
 shared-types (foundation)
     ↓
-api-core (depends on shared-types, uses better-sqlite3)
+api-core (depends on shared-types)
     ↓
-tasks-mcp-server (depends on api-core and shared-types)
+    ├─→ tasks-mcp-server (MCP server)
+    └─→ feature-explorer (Terminal UI)
 ```
 
 ## Prerequisites
@@ -74,6 +76,55 @@ This runs Turborepo in watch mode with auto-rebuild on file changes across all w
 - `pnpm outdated` - Check for outdated packages across workspace
 - `pnpm audit` - Run security audit
 - `pnpm update` - Interactively update packages
+
+## Applications
+
+### tasks-mcp-server
+
+MCP (Model Context Protocol) server providing feature management tools. See [apps/tasks-mcp-server/README.md](apps/tasks-mcp-server/README.md) for details.
+
+**Features:**
+
+- Feature CRUD operations via MCP tools
+- Dependency resolution and validation
+- Migration utilities for JSON ↔ SQLite
+
+**Usage:**
+
+```bash
+pnpm --filter @gcapnias/tasks-mcp-server start
+```
+
+### feature-explorer
+
+Interactive terminal UI for exploring features with two-pane layout. See [apps/feature-explorer/README.md](apps/feature-explorer/README.md) for details.
+
+**Features:**
+
+- Toggle between pending/completed features
+- Sort by scheduling score or priority
+- Color-coded high-priority items
+- Scrollable full feature details with dependency resolution
+- Real-time database refresh
+
+**Usage:**
+
+```bash
+# Initialize test database (first time only)
+pnpm esbuild apps/feature-explorer/src/init-test-db.ts --bundle --platform=node --format=esm --outfile=apps/feature-explorer/dist/init-test-db.mjs
+node apps/feature-explorer/dist/init-test-db.mjs
+
+# Run explorer
+pnpm --filter @gcapnias/feature-explorer start
+```
+
+**Keyboard Controls:**
+
+- `p` - Show pending features (sorted by scheduling score)
+- `c` - Show completed features (sorted by priority)
+- `r` - Refresh from database
+- `↑/↓` - Navigate list
+- `q` / `Esc` - Quit
 
 ## Configuration Files
 

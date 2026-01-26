@@ -34,7 +34,9 @@ pnpm audit                # Run security audit
 pnpm update               # Update packages interactively
 ```
 
-### Running MCP Server
+### Running Applications
+
+#### MCP Server
 
 ```bash
 # Recommended (ensures native module compatibility)
@@ -42,6 +44,16 @@ npx -p better-sqlite3 .
 
 # Alternative (if better-sqlite3 installed locally)
 node apps/mcp-server/dist/index.js
+```
+
+#### Feature Explorer
+
+```bash
+# Run the terminal UI
+pnpm --filter @gcapnias/feature-explorer start
+
+# Or directly
+node apps/feature-explorer/dist/index.js
 ```
 
 ---

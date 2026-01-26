@@ -22,9 +22,13 @@ autocoder-playground/
 │       └── dist/                 # Compiled output
 │
 ├── apps/                         # Application packages
-│   └── tasks-mcp-server/         # MCP server application (bundled with esbuild)
+│   ├── tasks-mcp-server/         # MCP server application (bundled with esbuild)
+│   │   ├── src/
+│   │   └── dist/                 # Bundled executable
+│   │
+│   └── feature-explorer/         # Terminal UI for exploring features
 │       ├── src/
-│       └── dist/                 # Bundled executable
+│       └── dist/                 # Compiled output
 │
 ├── docs/                         # Comprehensive documentation
 │   ├── SETUP_GUIDE.md            # Step-by-step initialization guide
@@ -40,7 +44,7 @@ autocoder-playground/
 └── tsconfig.json                 # TypeScript solution configuration
 ```
 
-**Dependency Flow:** `shared-types` → `api-core` → `tasks-mcp-server`
+**Dependency Flow:** `shared-types` → `api-core` → `tasks-mcp-server` | `feature-explorer`
 
 **Key Directories:**
 
@@ -66,6 +70,7 @@ autocoder-playground/
 ### Application & Packages Documentation
 
 - **[apps/tasks-mcp-server/README.md](apps/tasks-mcp-server/README.md)** - MCP server application documentation covering prerequisites, running instructions, and native module compatibility
+- **[apps/feature-explorer/README.md](apps/feature-explorer/README.md)** - Terminal UI application documentation with keyboard controls, layout details, and usage instructions
 - **[packages/api-core/README.md](packages/api-core/README.md)** - Core API package documentation with DatabaseService API reference, usage examples, and best practices
 
 ---

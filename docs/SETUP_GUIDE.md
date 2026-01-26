@@ -214,7 +214,8 @@ Create `tsconfig.json` (solution-style):
   "references": [
     { "path": "./packages/shared-types" },
     { "path": "./packages/api-core" },
-    { "path": "./apps/tasks-mcp-server" }
+    { "path": "./apps/tasks-mcp-server" },
+    { "path": "./apps/feature-explorer" }
   ]
 }
 ```
@@ -700,6 +701,174 @@ console.log('Server completed successfully');
 
 ---
 
+### 5.4 Create apps/feature-explorer
+
+#### package.json
+
+```bash
+mkdir -p apps/feature-explorer/src
+```
+
+Create `apps/feature-explorer/package.json`:
+
+```json
+{
+  "name": "@gcapnias/feature-explorer",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "feature-explorer": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@gcapnias/api-core": "workspace:*",
+    "@gcapnias/shared-types": "workspace:*",
+    "blessed": "^0.1.81"
+  },
+  "devDependencies": {
+    "@types/blessed": "^0.1.25",
+    "vitest": "^2.1.8"
+  }
+}
+```
+
+#### tsconfig.json
+
+Create `apps/feature-explorer/tsconfig.json`:
+
+```json
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"],
+  "references": [{ "path": "../../packages/shared-types" }, { "path": "../../packages/api-core" }]
+}
+```
+
+#### Source Code
+
+Create `apps/feature-explorer/src/index.ts`:
+
+```typescript
+#!/usr/bin/env node
+import blessed from 'blessed';
+import { DatabaseService } from '@gcapnias/api-core';
+import type { DatabaseConfig } from '@gcapnias/shared-types';
+import os from 'os';
+import path from 'path';
+
+const dbConfig: DatabaseConfig = {
+  path: path.join(os.homedir(), '.config', 'gcapnias', 'feature_tracker', 'tasks.db'),
+  verbose: false,
+};
+
+const db = new DatabaseService(dbConfig);
+const initResult = db.initialize();
+
+if (!initResult.success) {
+  console.error('Failed to initialize database:', initResult.error);
+  process.exit(1);
+}
+
+// Create blessed screen
+const screen = blessed.screen({
+  smartCSR: true,
+  title: 'Feature Explorer',
+});
+
+// Create UI components
+const listBox = blessed.list({
+  parent: screen,
+  label: ' Pending Features ',
+  width: '40%',
+  height: '100%',
+  border: { type: 'line' },
+  style: {
+    selected: { bg: 'blue' },
+    border: { fg: 'cyan' },
+  },
+  keys: true,
+  vi: true,
+});
+
+const detailBox = blessed.box({
+  parent: screen,
+  label: ' Feature Details ',
+  left: '40%',
+  width: '60%',
+  height: '100%',
+  border: { type: 'line' },
+  style: { border: { fg: 'cyan' } },
+  scrollable: true,
+  alwaysScroll: true,
+  keys: true,
+  vi: true,
+});
+
+// Status bar
+const statusBar = blessed.box({
+  parent: screen,
+  bottom: 0,
+  height: 1,
+  width: '100%',
+  content: '[p]ending [c]ompleted [r]efresh [q]uit',
+  style: { bg: 'blue', fg: 'white' },
+});
+
+// Load and display features
+function loadFeatures(status: 'pending' | 'completed') {
+  const result = db.getItems();
+  if (result.success && result.data) {
+    listBox.setLabel(` ${status.charAt(0).toUpperCase() + status.slice(1)} Features `);
+    listBox.setItems(result.data.map((item) => `${item.name} [${item.id}]`));
+    screen.render();
+  }
+}
+
+// Handle key events
+screen.key(['q', 'escape'], () => {
+  db.close();
+  process.exit(0);
+});
+
+screen.key('p', () => loadFeatures('pending'));
+screen.key('c', () => loadFeatures('completed'));
+screen.key('r', () => {
+  db.close();
+  db.initialize();
+  loadFeatures('pending');
+});
+
+// Initial load
+loadFeatures('pending');
+screen.render();
+```
+
+---
+
 ## Step 6: Documentation
 
 ### 6.1 Create MCP Server README
@@ -764,15 +933,16 @@ pnpm build
 **Expected output:**
 
 ```text
-• Packages in scope: @gcapnias/api-core, @gcapnias/tasks-mcp-server, @gcapnias/shared-types
-• Running build in 3 packages
+• Packages in scope: @gcapnias/api-core, @gcapnias/tasks-mcp-server, @gcapnias/feature-explorer, @gcapnias/shared-types
+• Running build in 4 packages
 @gcapnias/shared-types:build: cache miss, executing
 @gcapnias/api-core:build: cache miss, executing
 @gcapnias/mcp-server:build: cache miss, executing
+@gcapnias/feature-explorer:build: cache miss, executing
 
-Tasks:    3 successful, 3 total
-Cached:    0 cached, 3 total
-Time:    4.632s
+Tasks:    4 successful, 4 total
+Cached:    0 cached, 4 total
+Time:    5.124s
 ```
 
 ### 7.3 Verify Structure
@@ -808,7 +978,13 @@ tree -L 3 -I node_modules
 │       ├── package.json
 │       └── tsconfig.json
 └── apps/
-    └── mcp-server/
+    ├── mcp-server/
+    │   ├── dist/
+    │   ├── src/
+    │   ├── package.json
+    │   ├── tsconfig.json
+    │   └── README.md
+    └── feature-explorer/
         ├── dist/
         ├── src/
         ├── package.json

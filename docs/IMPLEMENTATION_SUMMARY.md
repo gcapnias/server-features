@@ -34,9 +34,16 @@ autocoder-playground/
 │       └── tsconfig.json
 │
 ├── apps/
-│   └── mcp-server/              # MCP server application
+│   ├── mcp-server/              # MCP server application
+│   │   ├── src/index.ts
+│   │   ├── dist/index.js        # Bundled output (executable)
+│   │   ├── package.json
+│   │   ├── tsconfig.json
+│   │   └── README.md
+│   │
+│   └── feature-explorer/        # Terminal UI for exploring features
 │       ├── src/index.ts
-│       ├── dist/index.js        # Bundled output (executable)
+│       ├── dist/index.js        # Compiled output
 │       ├── package.json
 │       ├── tsconfig.json
 │       └── README.md
@@ -105,10 +112,19 @@ autocoder-playground/
 - ✅ TypeScript references to both packages
 - ✅ Bundled successfully
 
+#### apps/feature-explorer
+
+- ✅ Depends on both internal packages via `workspace:*`
+- ✅ Uses blessed for terminal UI
+- ✅ TypeScript compilation (not bundled)
+- ✅ TypeScript references to both packages
+- ✅ Built successfully
+
 ### 6. Documentation
 
 - ✅ Root README.md - Monorepo architecture overview
 - ✅ apps/mcp-server/README.md - Usage with `npx -p better-sqlite3`
+- ✅ apps/feature-explorer/README.md - Terminal UI usage and controls
 - ✅ docs/SETUP_GUIDE.md - Complete step-by-step guide
 - ✅ docs/QUICK_REFERENCE.md - Commands and concepts reference
 
