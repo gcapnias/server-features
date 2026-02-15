@@ -33,11 +33,12 @@ Please create a comprehensive checkpoint commit with the following steps:
      - Breaking changes or migration notes if applicable
    - **Footer**: Include co-author attribution as shown in the Git Safety Protocol
 
-6. **Execute the commit**: Create the commit with the properly formatted message following this repository's conventions. When generating git commit commands, do not include literal `\n` strings inside the `-m` flag. Instead, use multiple `-m` flags for each paragraph (e.g., git commit -m "Title" -m "Body") to ensure the terminal renders newlines correctly.
+6. **Execute the commit**: Create the commit with the properly formatted message following this repository's conventions.
 
 IMPORTANT:
 
 - Do NOT skip any files - include everything
 - Make the commit message descriptive enough that someone reviewing the git log can understand what was accomplished
+- When generating git commit commands, do not include literal `\n` strings inside the `-m` flag. Instead, use multiple `-m` flags for each paragraph (e.g., git commit -m "Title" -m "Body") to ensure the terminal renders newlines correctly.
 - Follow the project's existing commit message conventions (check git log first)
 - Include the 'GitHub Copilot' <copilot@github.com> co-author attribution in the commit message
