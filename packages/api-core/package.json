@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@gcapnias/shared-types": "workspace:*",
-    "heap-js": "^2.5.0"
+    "heap-js": "^2.7.1"
   },
   "devDependencies": {
     "@types/node": "^25.0.10",

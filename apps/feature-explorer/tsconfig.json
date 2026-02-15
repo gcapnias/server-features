@@ -1,12 +1,29 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "composite": true,
-    "moduleResolution": "bundler"
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"],
-  "references": [{ "path": "../../packages/shared-types" }, { "path": "../../packages/api-core" }]
+  "references": [
+    {
+      "path": "../../packages/shared-types"
+    },
+    {
+      "path": "../../packages/api-core"
+    }
+  ]
 }
