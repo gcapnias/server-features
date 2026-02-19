@@ -3,6 +3,20 @@ agent: agent
 description: Create commit with detailed comment
 ---
 
+## Execution Contract (Non‑Negotiable)
+
+This prompt defines an **operational procedure**, not a conceptual guide.
+
+- All shell commands **MUST be executed**, not simulated.
+- File contents **MUST reflect the results of executed commands**.
+- Dependency versions **MUST be resolved by the package manager at execution time**, not inferred from prior knowledge.
+- If command execution is not supported, **halt immediately and report the limitation**.
+- Do **not** manually edit files to approximate expected outcomes.
+
+Shell commands are the **source of truth** for project state.
+
+## Workflow
+
 Please create a comprehensive checkpoint commit with the following steps:
 
 1. **Initialize Git if needed**: Check with `git rev-parse --is-inside-work-tree` if a git repository is already initialized. Else run `git init` to initialize a new repository.

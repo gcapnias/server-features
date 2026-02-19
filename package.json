@@ -18,12 +18,12 @@
     "update": "pnpm update -i -r"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "8.55.0",
-    "@typescript-eslint/parser": "8.55.0",
+    "@typescript-eslint/eslint-plugin": "8.56.0",
+    "@typescript-eslint/parser": "8.56.0",
     "esbuild": "0.27.3",
     "eslint": "9.39.2",
     "prettier": "3.8.1",
-    "turbo": "2.8.9",
+    "turbo": "2.8.10",
     "typescript": "5.9.3",
     "vitest": "4.0.18"
   }
