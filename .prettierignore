@@ -1,0 +1,5 @@
+# Exclude dist folders for specific packages
+apps/feature-explorer/dist/
+apps/tasks-mcp-server/dist/
+packages/api-core/dist/
+packages/shared-types/dist/

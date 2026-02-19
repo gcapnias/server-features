@@ -1,0 +1,36 @@
+name: Update Gist on file change
+on:
+  push:
+    # change these to match the file(s) you want to watch
+    paths:
+      - 'apps/tasks-mcp-server/dist/**'
+
+jobs:
+  update-gist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare payload and update gist
+        env:
+          GIST_ID: ${{ secrets.GIST_ID }}
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+        run: |
+          # file in your repo to copy into the gist
+          REPO_FILE="apps/tasks-mcp-server/dist/index.js"
+
+          # name to use inside the gist (you can change it)
+          GIST_FILENAME="index.js"
+
+          # Build a JSON payload using jq to safely handle content
+          # Ensure jq is installed on the runner (it is on ubuntu-latest)
+          CONTENT_JSON=$(jq -Rs '.' < "$REPO_FILE")
+          PAYLOAD=$(jq -n --arg name "$GIST_FILENAME" --argjson content "$CONTENT_JSON" '{files: {($name): {content: $content}}}')
+
+          # Update the gist
+          curl -s -X PATCH \
+            -H "Authorization: token ${GIST_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/gists/${GIST_ID} \
+            -d "$PAYLOAD"
